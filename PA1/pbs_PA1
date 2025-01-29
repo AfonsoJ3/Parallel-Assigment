@@ -1,0 +1,9 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=12
+#PBS -l walltime=00:03:00
+#PBS -q batch
+#PBS -N first_run
+#PBS -j oe
+
+cd ~/assignments/Parallel-Assigment/PA1
+./mm-student.x

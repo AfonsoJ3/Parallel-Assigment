@@ -11,13 +11,21 @@ void printMatrix(int n, double* matrix);
 //Main function
 int main(int argc, char **argv)
 {
-	int n;
-	printf("Enter a size of the matrix\n>>");
-	scanf("%d",&n);
-
-	//Generate a number that is in a rnage
+	//Generate a random number in a range
 	srand(time(NULL));
-	
+	//change the maxsize if a bigger array is needed. 
+	int maxSize = 7, minSize = 1; //max size is 7 bc the matrix would be too big to display.
+	int n = rand()%(maxSize - minSize + 1) - minSize;
+
+
+	if (n < 1)
+	{
+		n = rand()%(maxSize - minSize +1) - minSize;
+	}
+
+	printf("The matrix size: %dx%d\n",n,n);
+	//scanf("%d",&n);
+
 	//first array and second array
 	double* f_matrix = (double*)malloc(n*n*sizeof(double));
 	double* s_matrix = (double*)malloc(n*n*sizeof(double));
