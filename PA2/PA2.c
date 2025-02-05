@@ -56,23 +56,24 @@ int main(int argc, char** argv)
 	
 	double start1 = MPI_Wtime();
     	//Ping-Pong -- Your version here
-	for (int i = 1; i < numranks; i++ )
-	{	
+		
 		if (rank == 0)
 		{	
-			printf("The process 0 send array to process %d.\n", i);
-			MPI_Send(number, SIZE, MPI_INT, i, 0, MPI_COMM_WORLD);
-			MPI_Recv(number, SIZE, MPI_INT, i, 0, MPI_COMM_WORLD, &stat);
-			printf("The process 0 received array from process %d.\n", i);
+			for (int i = 1; i < numranks; i++ )
+			{
+				printf("The process 0 send array to process %d.\n", i);
+				MPI_Send(number, SIZE, MPI_INT, i, 0, MPI_COMM_WORLD);
+				MPI_Recv(number, SIZE, MPI_INT, i, 0, MPI_COMM_WORLD, &stat);
+				printf("The process 0 received array from process %d.\n", i);
+			}
 		}
-		else if (rank == i)
+		else
 		{	
 			MPI_Recv(number, SIZE, MPI_INT, 0, 0, MPI_COMM_WORLD, &stat);
 			printf("The process %d recived array from process 0.\n",rank);
 			printf("The process %d send array to process 0.\n",rank);
 			MPI_Send (number, SIZE, MPI_INT, 0, 0, MPI_COMM_WORLD);
 		}
-	}
 	
 	double end1 = MPI_Wtime();
 	if (rank == 0)
