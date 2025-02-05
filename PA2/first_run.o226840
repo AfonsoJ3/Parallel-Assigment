@@ -1,0 +1,61 @@
+The ring methid.
+The process 0 send array to process 1.
+The process 1 received array from process 0.
+The process 1 send array to  process 2.
+The process 2 received array from process 1.
+The process 2 send array to  process 3.
+The process 3 received array from process 2.
+The process 3 send array to  process 4.
+The process 4 received array from process 3.
+The process 4 send array to  process 5.
+The process 5 received array from process 4.
+The process 5 send array to  process 6.
+The process 6 received array from process 5.
+The process 6 send array to  process 7.
+The process 7 received array from process 6.
+The process 7 send array to  process 8.
+The process 8 received array from process 7.
+The process 8 send array to  process 9.
+The process 9 received array from process 8.
+The process 9 send array to process 0.
+The process 0 recived array from process 9.
+Time: 9.89895517.
+
+The ping pong method.
+The process 0 send array to process 1.
+The process 1 recived array from process 0.
+The process 1 send array to process 0.
+The process 0 received array from process 1.
+The process 0 send array to process 2.
+The process 2 recived array from process 0.
+The process 2 send array to process 0.
+The process 0 received array from process 2.
+The process 0 send array to process 3.
+The process 3 recived array from process 0.
+The process 3 send array to process 0.
+The process 0 received array from process 3.
+The process 0 send array to process 4.
+The process 4 recived array from process 0.
+The process 4 send array to process 0.
+The process 0 received array from process 4.
+The process 0 send array to process 5.
+The process 5 recived array from process 0.
+The process 5 send array to process 0.
+The process 0 received array from process 5.
+The process 0 send array to process 6.
+The process 6 recived array from process 0.
+The process 6 send array to process 0.
+The process 0 received array from process 6.
+The process 0 send array to process 7.
+The process 7 recived array from process 0.
+The process 7 send array to process 0.
+The process 0 received array from process 7.
+The process 0 send array to process 8.
+The process 8 recived array from process 0.
+The process 8 send array to process 0.
+The process 0 received array from process 8.
+The process 0 send array to process 9.
+The process 9 recived array from process 0.
+The process 9 send array to process 0.
+The process 0 received array from process 9.
+Time: 17.94271004.
