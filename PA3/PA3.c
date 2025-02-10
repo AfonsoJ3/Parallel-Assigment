@@ -29,17 +29,19 @@ int main(int argc, char** argv)
 
 				m [i] = i + 1; 
 			}
+
+			for (int i = 0; i < SIZE*SIZE; i++)
+			{
+				printf("%d\n", m[i]);
+			}
+
+			for (int i = 0; i < SIZE; i++)
+			{
+				printf("%d\n", v[i]);
+			}
 		}
 
-		for (int i = 0; i < SIZE*SIZE; i++)
-		{
-			printf("%d\n", m[i]);
-		}
-
-		for (int i = 0; i < SIZE; i++)
-		{
-			printf("%d\n", v[i]);
-		}
+		
 
     	MPI_Finalize();
 
