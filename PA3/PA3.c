@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 
 	int* m; //matrix pointer
 	int* v; //vector pointer
-
+	int* result;
 	MPI_Init(&argc,&argv);	
     	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
     	MPI_Comm_size(MPI_COMM_WORLD,&numranks);
@@ -30,17 +30,26 @@ int main(int argc, char** argv)
 
 				m [i] = i + 1; 
 			}
+			result = (int*)malloc(1*SIZE*sizeof(int));
 		}
 
-		int partition = SIZE/numranks;
-		int* mym = (int*) malloc(1*SIZE*sizeof(int));
+		//int partition = SIZE/numranks;
+		int* mym = (int*) malloc(1*SIZE*sizeof(int)); //holds the value of the rows 
 		MPI_Scatter(m, SIZE, MPI_INT, mym, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
-		for(int i = 0; i < SIZE; i++)
+		int product = 0;
+
+		for (int i = 0; i < SIZE; i++)
 		{
-			printf("Rank %d: %d\n", rank,mym[i]);
+			product += mym[i] * v[i];
 		}
-		
+
+		MPI_Gather( &product , SIZE , MPI_INT ,  result, SIZE, MPI_INT , 0 , MPI_COMM_WORLD);
+
+		for (int i = 0; i < SIZE; i++)
+		{
+			printf("The resul is: %d", result[i]);
+		}
 
     	MPI_Finalize();
 
