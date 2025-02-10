@@ -17,10 +17,11 @@ int main(int argc, char** argv)
 	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 	MPI_Comm_size(MPI_COMM_WORLD,&numranks);
 
+	v = (int*)malloc(1*SIZE*sizeof(int));
+
 	if(rank == 0)
 	{
 		m = (int*)malloc(SIZE*SIZE*sizeof(int));
-		v = (int*)malloc(1*SIZE*sizeof(int));
 
 		for (int i = 0; i < SIZE*SIZE; i++)
 		{
@@ -35,7 +36,7 @@ int main(int argc, char** argv)
 		result = (int*)malloc(1*SIZE*sizeof(int));
 	}
 
-	MPI_Bcast( v, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Bcast(v, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
 	//int partition = SIZE/numranks;
 	int* mym = (int*) malloc(1*SIZE*sizeof(int)); //holds the value of the rows 
@@ -49,7 +50,7 @@ int main(int argc, char** argv)
 		product += mym[i] * v[i];
 	}
 
-	MPI_Gather( &product , 1 , MPI_INT ,  result, 1, MPI_INT , 0 , MPI_COMM_WORLD);
+	MPI_Gather(&product, 1, MPI_INT,  result, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 	if (rank == 0)
 	{
