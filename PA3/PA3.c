@@ -34,6 +34,8 @@ int main(int argc, char** argv)
 			result = (int*)malloc(1*SIZE*sizeof(int));
 		}
 
+		MPI_Bcast( v, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
 		//int partition = SIZE/numranks;
 		int* mym = (int*) malloc(1*SIZE*sizeof(int)); //holds the value of the rows 
 		MPI_Scatter(m, SIZE, MPI_INT, mym, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
@@ -51,11 +53,14 @@ int main(int argc, char** argv)
 		{
 			printf("The resul is: %d", result[i]);
 		}
-		
+
 		free(m);
 		free(v);
-		free(result);
-		free(mym);
+		if(rank == 0)
+		{
+			free(result);
+			free(mym);
+		}
 
 
     	MPI_Finalize();
