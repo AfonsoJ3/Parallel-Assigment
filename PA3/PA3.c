@@ -24,22 +24,22 @@ int main(int argc, char** argv)
 
 		for (int i = 0; i < SIZE*SIZE; i++)
 		{
-			if (i < SIZE - 1)
-			{
-				v[i] = i + 1;
-			}
-
 			m [i] = i + 1; 
+		}
+
+		for (int i = 0; i < SIZE; i++)
+		{
+			v [i] = i + 1; 
 		}
 		
 		result = (int*)malloc(1*SIZE*sizeof(int));
 	}
 
-	MPI_Bcast( v, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Bcast( v, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
-	int partition = SIZE/numranks;
+	//int partition = SIZE/numranks;
 	int* mym = (int*) malloc(1*SIZE*sizeof(int)); //holds the value of the rows 
-	MPI_Scatter(m, partition, MPI_INT, mym, partition, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Scatter(m, SIZE, MPI_INT, mym, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
 	
 	int product = 0;
@@ -51,20 +51,19 @@ int main(int argc, char** argv)
 
 	MPI_Gather( &product , 1 , MPI_INT ,  result, 1, MPI_INT , 0 , MPI_COMM_WORLD);
 
-	for (int i = 0; i < SIZE; i++)
+	if (rank == 0)
 	{
-		printf("The resul is: %d", result[i]);
-	}
+		for (int i = 0; i < SIZE; i++)
+		{
+			printf("The resul is: %d", result[i]);
+		}
 
-	free(m);
-	free(v);
-
-	if(rank == 0)
-	{
 		free(result);
 		free(mym);
 	}
 
+	free(m);
+	free(v);
 
 	MPI_Finalize();
 
