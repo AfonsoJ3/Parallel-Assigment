@@ -30,6 +30,7 @@ int main(int argc, char** argv)
 
 				m [i] = i + 1; 
 			}
+			
 			result = (int*)malloc(1*SIZE*sizeof(int));
 		}
 
@@ -50,6 +51,12 @@ int main(int argc, char** argv)
 		{
 			printf("The resul is: %d", result[i]);
 		}
+		
+		free(m);
+		free(v);
+		free(result);
+		free(mym);
+
 
     	MPI_Finalize();
 
