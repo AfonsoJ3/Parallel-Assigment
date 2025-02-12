@@ -73,13 +73,17 @@ int main(int argc, char **argv) {
     sendcounts = (int *)malloc(size * sizeof(int));
     displs = (int *)malloc(size * sizeof(int));
 
-    // Compute row distribution for Scatterv()
+    //Compute row distribution for Scatterv()
     int rows_assigned = 0;
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) 
+    {
         sendcounts[i] = (MATRIX_DIM / size) * MATRIX_DIM;
-        if (i < MATRIX_DIM % size) {
+        
+        if (i < MATRIX_DIM % size) 
+        {
             sendcounts[i] += MATRIX_DIM;  // Extra row for first few processes
         }
+        
         displs[i] = rows_assigned * MATRIX_DIM;
         rows_assigned += sendcounts[i] / MATRIX_DIM;
     }
@@ -88,12 +92,15 @@ int main(int argc, char **argv) {
     local_matrix = (double *)malloc(local_rows * MATRIX_DIM * sizeof(double));
     local_result = (double *)malloc(local_rows * sizeof(double));
 
+    if (local_matrix == NULL || local_result == NULL) {
+        fprintf(stderr, "Rank %d: Memory allocation failed\n", rank);
+        MPI_Abort(MPI_COMM_WORLD, 1);
+    }
+
     double start_time = MPI_Wtime();
 
     // Scatter matrix rows
-    MPI_Scatterv(matrix, sendcounts, displs, MPI_DOUBLE,
-                 local_matrix, local_rows * MATRIX_DIM, MPI_DOUBLE,
-                 0, MPI_COMM_WORLD);
+    MPI_Scatterv(matrix, sendcounts, displs, MPI_DOUBLE, local_matrix, local_rows * MATRIX_DIM, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     // Debug: Print received matrix portion
     printf("Rank %d received %d rows of matrix:\n", rank, local_rows);
@@ -105,25 +112,25 @@ int main(int argc, char **argv) {
     double compute_time = MPI_Wtime() - compute_start;
 
     // Debug: Print local result before gathering
-    print_vector(local_result, local_rows, "Local Result");
+     print_vector(local_result, local_rows, "Local Result");
 
     // Gather results
-    MPI_Gatherv(local_result, local_rows, MPI_DOUBLE,
-                result, sendcounts, displs, MPI_DOUBLE,
-                0, MPI_COMM_WORLD);
+    // MPI_Gatherv(local_result, local_rows, MPI_DOUBLE,
+    //             result, sendcounts, displs, MPI_DOUBLE,
+    //             0, MPI_COMM_WORLD);
 
-    double end_time = MPI_Wtime();
-    double total_time = end_time - start_time;
+    // double end_time = MPI_Wtime();
+    // double total_time = end_time - start_time;
 
     if (rank == 0) {
-        printf("\nResult Vector:\n");
-        print_vector(result, MATRIX_DIM, "Result");
+    //     printf("\nResult Vector:\n");
+    //     print_vector(result, MATRIX_DIM, "Result");
 
-        // Handle zero compute time case for FLOPS calculation
-        double flops = (compute_time > 0) ? (2.0 * MATRIX_DIM * MATRIX_DIM) / compute_time : 0.0;
+    //     Handle zero compute time case for FLOPS calculation
+    //     double flops = (compute_time > 0) ? (2.0 * MATRIX_DIM * MATRIX_DIM) / compute_time : 0.0;
 
-        printf("\nRanks: %d, Total Time: %.6f sec, Compute Time: %.6f sec, FLOPS: %.2f\n",
-               size, total_time, compute_time, flops);
+    //     printf("\nRanks: %d, Total Time: %.6f sec, Compute Time: %.6f sec, FLOPS: %.2f\n",
+    //            size, total_time, compute_time, flops);
 
         free(matrix);
         free(result);
@@ -138,4 +145,3 @@ int main(int argc, char **argv) {
     MPI_Finalize();
     return 0;
 }
-
