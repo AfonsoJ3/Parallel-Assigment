@@ -3,7 +3,7 @@
 #include <mpi.h>
 
 //Change it to a bigger mumber. 
-#define SIZE 3
+#define SIZE 10
 
 int main(int argc, char** argv)
 {
@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 
 	//int partition = SIZE/numranks;
 	int* mym = (int*) malloc(partitionLine*SIZE*sizeof(int)); //holds the value of the rows 
-	MPI_Scatter(m, partitionLine, MPI_INT, mym, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Scatter(m, partitionLine * SIZE, MPI_INT, mym,partitionLine * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
 	
 	int product = 0;
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
 	{
 		for (int i = 0; i < SIZE; i++)
 		{
-			printf("The resul is: %d", result[i]);
+			printf("The resul is: %d.\n", result[i]);
 		}
 
 		free(result);
