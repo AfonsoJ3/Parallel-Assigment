@@ -102,11 +102,23 @@ int main(int argc, char **argv) {
     printf("Rank %d received %d rows of matrix:\n", rank, local_rows);
     print_matrix(local_matrix, local_rows, MATRIX_DIM);
 
-    // Perform matrix-vector multiplication
-    matvec_mult(local_matrix, vector, local_result, local_rows, MATRIX_DIM);
+    if (rank == 0)
+    {
+        // Perform matrix-vector multiplication
+        matvec_mult(local_matrix, vector, local_result, local_rows, MATRIX_DIM);
+
+        // Debug: Print local result before gathering
+        print_vector(local_result, local_rows, "Local Result");
+    }
+
+    else
+    {
+        // Perform matrix-vector multiplication
+        matvec_mult(local_matrix, vector, local_result, local_rows, MATRIX_DIM);
 
     // Debug: Print local result before gathering
-    print_vector(local_result, local_rows, "Local Result");
+        print_vector(local_result, local_rows, "Local Result");
+    }
 
     // Gather results
     MPI_Gatherv(local_result, local_rows, MPI_DOUBLE,
