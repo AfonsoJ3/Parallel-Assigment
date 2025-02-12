@@ -102,27 +102,24 @@ int main(int argc, char **argv) {
     printf("Rank %d received %d rows of matrix:\n", rank, local_rows);
     print_matrix(local_matrix, local_rows, MATRIX_DIM);
 
-    if (rank == 0)
-    {
-        // Perform matrix-vector multiplication
-        matvec_mult(local_matrix, vector, local_result, local_rows, MATRIX_DIM);
-
-        // Debug: Print local result before gathering
-        print_vector(local_result, local_rows, "Local Result");
-    }
-
-    else
-    {
-        // Perform matrix-vector multiplication
-        matvec_mult(local_matrix, vector, local_result, local_rows, MATRIX_DIM);
+    // Perform matrix-vector multiplication
+    matvec_mult(local_matrix, vector, local_result, local_rows, MATRIX_DIM);
 
     // Debug: Print local result before gathering
-        print_vector(local_result, local_rows, "Local Result");
+    print_vector(local_result, local_rows, "Local Result");
+
+    // Recompute sendcounts and displs for MPI_Gatherv
+    int *gather_sendcounts = (int *)malloc(size * sizeof(int));
+    int *gather_displs = (int *)malloc(size * sizeof(int));
+
+    for (int i = 0; i < size; i++) {
+        gather_sendcounts[i] = 1;  // Each rank sends 1 element
+        gather_displs[i] = i;      // Starting index in the result vector
     }
 
     // Gather results
-    MPI_Gatherv(local_result, 1, MPI_DOUBLE,
-                result, sendcounts, 1, MPI_DOUBLE,
+    MPI_Gatherv(local_result, 1, MPI_DOUBLE,  // Each rank sends 1 element
+                result, gather_sendcounts, gather_displs, MPI_DOUBLE,
                 0, MPI_COMM_WORLD);
 
     if (rank == 0) {
@@ -135,6 +132,8 @@ int main(int argc, char **argv) {
     free(local_result);
     free(sendcounts);
     free(displs);
+    free(gather_sendcounts);
+    free(gather_displs);
 
     if (rank == 0) {
         free(matrix);
