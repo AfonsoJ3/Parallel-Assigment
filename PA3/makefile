@@ -1,8 +1,8 @@
 FCC = mpicc 
 LDA = mpicc
 
-PROG = PA3.x
-OBJ = PA3.o
+PROG = test.x 
+OBJ = test.o
 
 RM = rm -rf
 

@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 	MPI_Bcast(v, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
 	//int partition = SIZE/numranks;
-	int* mym = (int*) malloc(partitionLine*SIZE*sizeof(int)); //holds the value of the rows 
+	int* mym = (int*) malloc(SIZE*SIZE*sizeof(int)); //holds the value of the rows 
 	MPI_Scatter(m, partitionLine * SIZE, MPI_INT, mym,partitionLine * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
 	
