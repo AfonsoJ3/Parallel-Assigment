@@ -121,8 +121,8 @@ int main(int argc, char **argv) {
     }
 
     // Gather results
-    MPI_Gatherv(local_result, local_rows, MPI_DOUBLE,
-                result, sendcounts, displs, MPI_DOUBLE,
+    MPI_Gatherv(local_result, 1, MPI_DOUBLE,
+                result, sendcounts, 1, MPI_DOUBLE,
                 0, MPI_COMM_WORLD);
 
     if (rank == 0) {
