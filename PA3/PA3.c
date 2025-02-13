@@ -26,12 +26,12 @@ void printMatrix(int* matrix, int size)
 	printf("%d * %d Matrix:\n[ ",size,size);
 	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < size2; j++)
+		for (int j = 0; j < size; j++)
 		{
 			printf("%d ", matrix[i * size + j]); 
 		}
 	}
-	print("]\n");
+	printf("]\n");
 }
 
 void printVector(int* vector, int size)
@@ -39,7 +39,7 @@ void printVector(int* vector, int size)
 	printf("%d * 1 Vector:\n[ ",size,size);
 	for (int i = 0; i < size; i++)
 	{
-		printf("%d ", matrix[i]); 
+		printf("%d ", vector[i]); 
 		
 	}
 	print("]\n");
@@ -88,11 +88,12 @@ int main(int argc, char** argv)
 
 	if (rank == 0)
 	{
-		for (int i = 0; i < SIZE; i++)
-		{
-			printf("The resul is: %d.\n", result[i]);
-		}
-
+		// for (int i = 0; i < SIZE; i++)
+		// {
+		// 	printf("The resul is: %d.\n", result[i]);
+		// }
+		printMatrix(m, SIZE);
+		printVector(v, SIZE);
 		free(result);
 		free(m);
 	}
