@@ -120,18 +120,17 @@ int main(int argc, char** argv)
 	int* myv = (int*) malloc(row * sizeof(int));
 	calVector(myv, mym, v, row); // Removed incorrect type declarations
 
-	for(int i = 0; i < row; i++)
-	{
-    	printf("Result is: %d\n", myv[i]); // Printing correct result
-	}
+	// for(int i = 0; i < row; i++)
+	// {
+    // 	printf("Result is: %d\n", myv[i]); // Printing correct result
+	// }
 
-
-	MPI_Gather(result, 1, MPI_INT,  myv, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Gather(result, row, MPI_INT,  myv, row, MPI_INT, 0, MPI_COMM_WORLD);
 
 	if (rank == 0)
 	{
 		printf("\nThe final result\n");
-		printVector(result, numranks);
+		printVector(result, SIZE);
 
 		free(result);
 		free(m);
