@@ -31,7 +31,7 @@ void printMatrix(int* matrix, int size)
 			printf("%d ", matrix[i * size + j]); 
 		}
 	}
-	printf("]\n");
+	printf("]\n\n");
 }
 
 void printVector(int* vector, int size)
@@ -39,30 +39,19 @@ void printVector(int* vector, int size)
 	printf("%d * 1 Vector:\n[ ",size);
 	for (int i = 0; i < size; i++)
 	{
-		printf("%d ", vector[i]); 
+		printf("%d \n", vector[i]); 
 		
 	}
-	print("]\n");
+	printf("]\n\n");
 }
 
 // Debug 
-void printBcast(int* vector, int size)
-{
-	printf("[\n");
-	for (int i = 0; i < size; i++)
-	{
-		printf("%d\n", vector[i]); 
-		
-	}
-	printf("]\n");
-}
-//Debug
-void printScatter(int* vector, int size)
+void printResult(int* vector, int size)
 {
 	printf("[");
 	for (int i = 0; i < size; i++)
 	{
-		printf("%d ", vector[i]); 
+		printf(" %d", vector[i]); 
 		
 	}
 	printf("]\n");
@@ -101,16 +90,16 @@ int main(int argc, char** argv)
 
 	MPI_Bcast(v, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 	//debug
-	printf("The vector was Bcast. Rank: %d/n", rank);
-	printBcast(v, SIZE);
+//	printf("The vector was Bcast. Rank: %d\n", rank);
+	//printResult(v, SIZE);
 	
 
 	int* mym = (int*) malloc(row*SIZE*sizeof(int)); //holds the value of the rows 
 	MPI_Scatter(m, row * SIZE, MPI_INT, mym, row * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
 	//debug
-	printf("The vector was Scatter. Rank: %d/n", rank);
-	printScatter(v, SIZE);
+	printf("The vector was Scatter. Rank: %d\n", rank);
+	printResult(mym, (SIZE*SIZE/numranks));
 	
 	// int product = 0;
 
