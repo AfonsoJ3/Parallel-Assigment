@@ -59,9 +59,7 @@ void printResult(int* vector, int size)
 
 int main(int argc, char** argv)
 {
-	int rank, numranks, row;
-
-	int mysize = SIZE;
+	int rank, numranks, row, remainder, mysize;
 	int* m; //matrix pointer
 	int* v; //vector pointer
 	int* result;
@@ -71,11 +69,14 @@ int main(int argc, char** argv)
 	MPI_Comm_size(MPI_COMM_WORLD,&numranks);
 
 	row = SIZE / numranks;
-
-	if(SIZE % numranks != 0)
+	remainder = SIZE % numranks;
+	if ( remainder != 0)
 	{
-		row += 1;
-		mysize = row * numranks; 
+		mysize = (row + 1) * numranks;
+	}
+	else 
+	{
+		mysize = SIZE;
 	}
 
 	v = (int*)malloc(1*SIZE*sizeof(int));
@@ -95,7 +96,7 @@ int main(int argc, char** argv)
 	
 
 	int* mym = (int*) malloc(row*SIZE*sizeof(int)); //holds the value of the rows 
-	MPI_Scatter(m, row * SIZE, MPI_INT, mym, row * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Scatter(m, (row + 1)* SIZE, MPI_INT, mym, (row + 1) * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
 	//debug
 	printf("The vector was Scatter. Rank: %d\n", rank);
