@@ -36,7 +36,30 @@ void printMatrix(int* matrix, int size)
 
 void printVector(int* vector, int size)
 {
-	printf("%d * 1 Vector:\n[ ",size,size);
+	printf("%d * 1 Vector:\n[ ",size);
+	for (int i = 0; i < size; i++)
+	{
+		printf("%d ", vector[i]); 
+		
+	}
+	print("]\n");
+}
+
+// Debug 
+void printBcast(int* vector, int size)
+{
+	printf("[\n",size);
+	for (int i = 0; i < size; i++)
+	{
+		printf("%d\n", vector[i]); 
+		
+	}
+	print("]\n");
+}
+//Debug
+void printScatter(int* vector, int size)
+{
+	printf("[",size);
 	for (int i = 0; i < size; i++)
 	{
 		printf("%d ", vector[i]); 
@@ -47,8 +70,9 @@ void printVector(int* vector, int size)
 
 int main(int argc, char** argv)
 {
-	int rank, numranks;
+	int rank, numranks, row;
 
+	int mysize = SIZE;
 	int* m; //matrix pointer
 	int* v; //vector pointer
 	int* result;
@@ -57,22 +81,36 @@ int main(int argc, char** argv)
 	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 	MPI_Comm_size(MPI_COMM_WORLD,&numranks);
 
+	row = SIZE / numranks;
+
+	if(SIZE % numranks != 0)
+	{
+		row += 1;
+		mysize = row * numranks; 
+	}
+
 	v = (int*)malloc(1*SIZE*sizeof(int));
 
 	if(rank == 0)
 	{
-		m = (int*)malloc(SIZE*SIZE*sizeof(int));
+		m = (int*)malloc(mysize*SIZE*sizeof(int));
 		result = (int*)malloc(1*SIZE*sizeof(int));
 		gen_matrix(m, SIZE);
-		gen_vector(v, SIZE)
+		gen_vector(v, SIZE);
 	}
 
-	// MPI_Bcast(v, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Bcast(v, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
+	//debug
+	printf("The vector was Bcast. Rank: %d/n", rank);
+	printBcast(v, SIZE);
+	
 
-	// //int partition = SIZE/numranks;
-	// int* mym = (int*) malloc(SIZE*SIZE*sizeof(int)); //holds the value of the rows 
-	// MPI_Scatter(m, partitionLine * SIZE, MPI_INT, mym,partitionLine * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
+	int* mym = (int*) malloc(row*SIZE*sizeof(int)); //holds the value of the rows 
+	MPI_Scatter(m, row * SIZE, MPI_INT, mym, row * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
+	//debug
+	printf("The vector was Scatter. Rank: %d/n", rank);
+	printScatter(v, SIZE);
 	
 	// int product = 0;
 
