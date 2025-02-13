@@ -30,7 +30,7 @@ void printMatrix(int* matrix, int size)
 		{
 			printf("%d ", matrix[i * size + j]); 
 		}
-		
+		printf("\n");
 	}
 	printf("]\n\n");
 }
@@ -127,7 +127,7 @@ int main(int argc, char** argv)
 
 	double gStart = MPI_Wtime();
 	MPI_Gather(myv, row, MPI_INT,  result, row, MPI_INT, 0, MPI_COMM_WORLD);
-	double gEnd = MPI_wtime()
+	double gEnd = MPI_Wtime();
 
 	if (rank == 0)
 	{
