@@ -30,6 +30,7 @@ void printMatrix(int* matrix, int size)
 		{
 			printf("%d ", matrix[i * size + j]); 
 		}
+		
 	}
 	printf("]\n\n");
 }
@@ -103,16 +104,20 @@ int main(int argc, char** argv)
 		printMatrix(m, SIZE);
 		printVector(v, SIZE);
 	}
-
+	int bStart = MPI_Wtime();
 	MPI_Bcast(v, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
+	int bEnd = MPI_Wtime();
+
 	//debug
-//	printf("The vector was Bcast. Rank: %d\n", rank);
+	//printf("The vector was Bcast. Rank: %d\n", rank);
 	//printResult(v, SIZE);
 	
 
 	int* mym = (int*) malloc(row*SIZE*sizeof(int)); //holds the value of the rows 
-	MPI_Scatter(m, row * SIZE, MPI_INT, mym, row * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
+	int scStart = MPI_Wtime();
+	MPI_Scatter(m, row * SIZE, MPI_INT, mym, row * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
+	int scEnd = MPI_Wtime();
 	//debug
 	//printf("The vector was Scatter. Rank: %d\n", rank);
 	//printResult(mym, (SIZE*SIZE/numranks));
@@ -120,18 +125,18 @@ int main(int argc, char** argv)
 	int* myv = (int*) malloc(row * sizeof(int));
 	calVector(myv, mym, v, row); // Removed incorrect type declarations
 
-	// for(int i = 0; i < row; i++)
-	// {
-    // 	printf("Result is: %d\n", myv[i]); // Printing correct result
-	// }
-
+	int gStart = MPI_Wtime();
 	MPI_Gather(myv, row, MPI_INT,  result, row, MPI_INT, 0, MPI_COMM_WORLD);
+	int gEnd = MPI_wtime()
 
 	if (rank == 0)
 	{
 		printf("\nThe final result\n");
 		printVector(result, SIZE);
 
+		printf(" %d -> Time that took to broadcastt the vertice to all %d ranks.\n", bEnd - bStart, numranks);
+		printf(" %d -> Time that took to Scatter the matrix to all %d ranks.\n", scEnd - scStart, numranks);
+		printf(" %d -> Time that took to gather the vertice to all %d ranks.\n", gEndEnd - gStart, rank);
 		free(result);
 		free(m);
 	}
