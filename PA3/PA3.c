@@ -45,6 +45,19 @@ void printVector(int* vector, int size)
 	printf("]\n\n");
 }
 
+void calVector(int* resultV, int* mymatrix, int* vector, int row)
+{
+	for(int i = 0; i < row; i++)
+	{
+		resultV[i] = 0;
+		for (int j = 0; j < SIZE; j++)
+		{
+			resultV[i] += mymatrix[i * SIZE + j] * vector[j];
+		}
+		
+	}
+}
+
 // Debug 
 void printResult(int* vector, int size)
 {
@@ -59,7 +72,9 @@ void printResult(int* vector, int size)
 
 int main(int argc, char** argv)
 {
-	int rank, numranks, row, remainder, mysize;
+	int rank, numranks, row;
+
+	int mysize = SIZE;
 	int* m; //matrix pointer
 	int* v; //vector pointer
 	int* result;
@@ -69,14 +84,11 @@ int main(int argc, char** argv)
 	MPI_Comm_size(MPI_COMM_WORLD,&numranks);
 
 	row = SIZE / numranks;
-	remainder = SIZE % numranks;
-	if ( remainder != 0)
+
+	if(SIZE % numranks != 0)
 	{
-		mysize = (row + 1) * numranks;
-	}
-	else 
-	{
-		mysize = SIZE;
+		row += 1;
+		mysize = row * numranks; 
 	}
 
 	v = (int*)malloc(1*SIZE*sizeof(int));
@@ -96,21 +108,20 @@ int main(int argc, char** argv)
 	
 
 	int* mym = (int*) malloc(row*SIZE*sizeof(int)); //holds the value of the rows 
-	MPI_Scatter(m, (row + 1)* SIZE, MPI_INT, mym, (row + 1) * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Scatter(m, row * SIZE, MPI_INT, mym, row * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 
 	//debug
-	printf("The vector was Scatter. Rank: %d\n", rank);
-	printResult(mym, row * SIZE);
+	//printf("The vector was Scatter. Rank: %d\n", rank);
+	//printResult(mym, (SIZE*SIZE/numranks));
 	
-	// int product = 0;
+	int* myv = (int*) malloc(row * sizeof(int));
+	calVector(myv, mym, v, row); // Removed incorrect type declarations
 
-	// for (int i = 0; i < partitionLine; i++)
-	// {
-	// 	for (int j = 0; j < SIZE; j++)
-	// 	{
-	// 		product += mym[i * SIZE + j] * v[j];
-	// 	}
-	// }
+	for(int i = 0; i < row; i++)
+	{
+    	printf("Result is: %d\n", myv[i]); // Printing correct result
+	}
+
 
 	// MPI_Gather(&product, 1, MPI_INT,  result, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
