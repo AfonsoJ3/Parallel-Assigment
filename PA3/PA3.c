@@ -99,7 +99,7 @@ int main(int argc, char** argv)
 
 	//debug
 	printf("The vector was Scatter. Rank: %d\n", rank);
-	printResult(mym, (SIZE*SIZE/numranks));
+	printResult(mym, row * SIZE);
 	
 	// int product = 0;
 
