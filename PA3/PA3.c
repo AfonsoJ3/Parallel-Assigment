@@ -125,7 +125,7 @@ int main(int argc, char** argv)
     // 	printf("Result is: %d\n", myv[i]); // Printing correct result
 	// }
 
-	MPI_Gather(result, row, MPI_INT,  myv, row, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Gather(myv, row, MPI_INT,  result, row, MPI_INT, 0, MPI_COMM_WORLD);
 
 	if (rank == 0)
 	{
