@@ -39,7 +39,7 @@ void printVector(int* vector, int size)
 	printf("%d * 1 Vector:\n[ ",size);
 	for (int i = 0; i < size; i++)
 	{
-		printf("%d \n", vector[i]); 
+		printf("%d ", vector[i]); 
 		
 	}
 	printf("]\n\n");
@@ -99,6 +99,9 @@ int main(int argc, char** argv)
 		result = (int*)malloc(1*SIZE*sizeof(int));
 		gen_matrix(m, SIZE);
 		gen_vector(v, SIZE);
+
+		printMatrix(m, SIZE);
+		printVector(v, SIZE);
 	}
 
 	MPI_Bcast(v, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
@@ -123,22 +126,21 @@ int main(int argc, char** argv)
 	}
 
 
-	// MPI_Gather(&product, 1, MPI_INT,  result, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Gather(result, 1, MPI_INT,  myv, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 	if (rank == 0)
 	{
-		// for (int i = 0; i < SIZE; i++)
-		// {
-		// 	printf("The resul is: %d.\n", result[i]);
-		// }
-		printMatrix(m, SIZE);
-		printVector(v, SIZE);
+		printf("\nThe final result\n");
+		printVector(result, numranks);
+
 		free(result);
 		free(m);
 	}
 
 	//free(m);
 	free(v);
+	free(mym);
+	free(myv);
 
 	MPI_Finalize();
 
