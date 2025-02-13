@@ -48,24 +48,24 @@ void printVector(int* vector, int size)
 // Debug 
 void printBcast(int* vector, int size)
 {
-	printf("[\n",size);
+	printf("[\n");
 	for (int i = 0; i < size; i++)
 	{
 		printf("%d\n", vector[i]); 
 		
 	}
-	print("]\n");
+	printf("]\n");
 }
 //Debug
 void printScatter(int* vector, int size)
 {
-	printf("[",size);
+	printf("[");
 	for (int i = 0; i < size; i++)
 	{
 		printf("%d ", vector[i]); 
 		
 	}
-	print("]\n");
+	printf("]\n");
 }
 
 int main(int argc, char** argv)
