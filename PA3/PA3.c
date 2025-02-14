@@ -4,7 +4,7 @@
 #include <time.h>
 
 //Change it to a bigger mumber. 
-#define SIZE 400
+#define SIZE 50000
 
 void gen_matrix(int* matrix, int size)
 {
@@ -71,6 +71,8 @@ int main(int argc, char** argv)
 	int* v; //vector pointer
 	int* result;
 
+	printf("Printing the first 10 elements!!!\n");
+
 	MPI_Init(&argc,&argv);	
 	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 	MPI_Comm_size(MPI_COMM_WORLD,&numranks);
@@ -91,7 +93,7 @@ int main(int argc, char** argv)
 		result = (int*)malloc(1*SIZE*sizeof(int));
 		gen_matrix(m, SIZE);
 		gen_vector(v, SIZE);
-
+		
 		//Debug
 		printMatrix(m, SIZE);
 		printVector(v, SIZE);
