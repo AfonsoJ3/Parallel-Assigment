@@ -108,7 +108,9 @@ int main(int argc, char** argv)
 	double scEnd = MPI_Wtime();
 	
 	int* myv = (int*) malloc(row * sizeof(int));
+	double calStart = MPI_Wtime();
 	calVector(myv, mym, v, row);
+	double calEnd = MPI_Wtime();
 
 	double gStart = MPI_Wtime();
 	MPI_Gather(myv, row, MPI_INT,  result, row, MPI_INT, 0, MPI_COMM_WORLD);
@@ -119,9 +121,10 @@ int main(int argc, char** argv)
 		printf("\nThe final result\n");
 		printVector(result, SIZE);
 
-		printf(" %.6f -> Time that took to broadcastt the vertice to all %d ranks.\n", bEnd - bStart, numranks);
+		printf(" %.6f -> Time that took to broadcastt the vector to all %d ranks.\n", bEnd - bStart, numranks);
 		printf(" %.6f -> Time that took to Scatter the matrix to all %d ranks.\n", scEnd - scStart, numranks);
-		printf(" %.6f -> Time that took to gather the vertice to all %d ranks.\n", gEnd - gStart, rank);
+		printf(" %.6f -> Time that took to gather the vector to all %d ranks.\n", gEnd - gStart, rank);
+		printf(" %.6f -> Time that took to calculate the vector.\n", calEnd - calStart);
 		
 		//free memory
 		free(result);
