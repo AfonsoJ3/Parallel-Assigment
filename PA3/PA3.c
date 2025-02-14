@@ -4,7 +4,7 @@
 #include <time.h>
 
 //Change it to a bigger mumber. 
-#define SIZE 50000
+#define SIZE 32768
 
 void gen_matrix(int* matrix, int size)
 {
@@ -66,7 +66,7 @@ int main(int argc, char** argv)
 {
 	int rank, numranks, row;
 
-	int mysize = SIZE;
+	//int mysize = SIZE;
 	int* m; //matrix pointer
 	int* v; //vector pointer
 	int* result;
@@ -79,17 +79,17 @@ int main(int argc, char** argv)
 
 	row = SIZE / numranks;
 
-	if(SIZE % numranks != 0)
-	{
-		row += 1;
-		mysize = row * numranks; 
-	}
+	// if(SIZE % numranks != 0)
+	// {
+	// 	row += 1;
+	// 	mysize = row * numranks; 
+	// }
 
 	v = (int*)malloc(1*SIZE*sizeof(int));
 
 	if(rank == 0)
 	{
-		m = (int*)malloc(mysize*SIZE*sizeof(int));
+		m = (int*)malloc(row*SIZE*sizeof(int));
 		result = (int*)malloc(1*SIZE*sizeof(int));
 		gen_matrix(m, SIZE);
 		gen_vector(v, SIZE);
