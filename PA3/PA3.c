@@ -4,7 +4,7 @@
 #include <time.h>
 
 //Change it to a bigger mumber. 
-#define SIZE 16384 
+#define SIZE 40000
 
 void gen_matrix(int* matrix, int size)
 {
@@ -123,10 +123,10 @@ int main(int argc, char** argv)
 		printf("\nThe final result\n");
 		printVector(result, SIZE);
 
-		printf(" %.6f -> Time that took to broadcastt the vector to all %d ranks.\n", bEnd - bStart, numranks);
-		printf(" %.6f -> Time that took to Scatter the matrix to all %d ranks.\n", scEnd - scStart, numranks);
-		printf(" %.6f -> Time that took to gather the vector to all %d ranks.\n", gEnd - gStart, rank);
-		printf(" %.6f -> Time that took to calculate the vector.\n", calEnd - calStart);
+		printf(" %.10f -> Time that took to broadcastt the vector to all %d ranks.\n", bEnd - bStart, numranks);
+		printf(" %.10f -> Time that took to Scatter the matrix to all %d ranks.\n", scEnd - scStart, numranks);
+		printf(" %.10f -> Time that took to gather the vector to all %d ranks.\n", gEnd - gStart, rank);
+		printf(" %.10f -> Time that took to calculate the vector.\n", calEnd - calStart);
 		
 		//free memory
 		free(result);
