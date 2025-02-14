@@ -1,23 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
+#include <time.h>
 
 //Change it to a bigger mumber. 
-#define SIZE 40000
+#define SIZE 400
 
 void gen_matrix(int* matrix, int size)
 {
+	srand(time(NULL)); 
 	for (int i = 0; i < size*size; i++)
 	{
-		matrix [i] = i + 1; 
+		matrix [i] = rand() % SIZE; 
 	}
 }
 
 void gen_vector(int* vector, int size)
 {
+	srand(time(NULL) + 1);
 	for (int i = 0; i < SIZE; i++)
 	{
-		vector [i] = i + 1; 
+		vector [i] = rand() % SIZE; 
 	}
 }
 
@@ -59,18 +62,6 @@ void calVector(int* resultV, int* mymatrix, int* vector, int row)
 	}
 }
 
-// Debug 
-void printResult(int* vector, int size)
-{
-	printf("[");
-	for (int i = 0; i < 100; i++)
-	{
-		printf(" %d", vector[i]); 
-		
-	}
-	printf("]\n");
-}
-
 int main(int argc, char** argv)
 {
 	int rank, numranks, row;
@@ -101,29 +92,23 @@ int main(int argc, char** argv)
 		gen_matrix(m, SIZE);
 		gen_vector(v, SIZE);
 
+		//Debug
 		printMatrix(m, SIZE);
 		printVector(v, SIZE);
 	}
+
 	double bStart = MPI_Wtime();
 	MPI_Bcast(v, SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 	double bEnd = MPI_Wtime();
 
-	//debug
-	//printf("The vector was Bcast. Rank: %d\n", rank);
-	//printResult(v, SIZE);
-	
-
-	int* mym = (int*) malloc(row*SIZE*sizeof(int)); //holds the value of the rows 
+	int* mym = (int*) malloc(row*SIZE*sizeof(int)); 
 
 	double scStart = MPI_Wtime();
 	MPI_Scatter(m, row * SIZE, MPI_INT, mym, row * SIZE, MPI_INT, 0, MPI_COMM_WORLD);
 	double scEnd = MPI_Wtime();
-	//debug
-	//printf("The vector was Scatter. Rank: %d\n", rank);
-	//printResult(mym, (SIZE*SIZE/numranks));
 	
 	int* myv = (int*) malloc(row * sizeof(int));
-	calVector(myv, mym, v, row); // Removed incorrect type declarations
+	calVector(myv, mym, v, row);
 
 	double gStart = MPI_Wtime();
 	MPI_Gather(myv, row, MPI_INT,  result, row, MPI_INT, 0, MPI_COMM_WORLD);
@@ -137,11 +122,13 @@ int main(int argc, char** argv)
 		printf(" %.6f -> Time that took to broadcastt the vertice to all %d ranks.\n", bEnd - bStart, numranks);
 		printf(" %.6f -> Time that took to Scatter the matrix to all %d ranks.\n", scEnd - scStart, numranks);
 		printf(" %.6f -> Time that took to gather the vertice to all %d ranks.\n", gEnd - gStart, rank);
+		
+		//free memory
 		free(result);
 		free(m);
 	}
 
-	//free(m);
+	//free memory ;
 	free(v);
 	free(mym);
 	free(myv);
