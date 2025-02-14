@@ -3,7 +3,7 @@
 #include <mpi.h>
 
 //Change it to a bigger mumber. 
-#define SIZE 10
+#define SIZE 40000
 
 void gen_matrix(int* matrix, int size)
 {
@@ -24,9 +24,9 @@ void gen_vector(int* vector, int size)
 void printMatrix(int* matrix, int size)
 {
 	printf("%d * %d Matrix:\n[ ",size,size);
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < 10; i++)
 	{
-		for (int j = 0; j < size; j++)
+		for (int j = 0; j < 10; j++)
 		{
 			printf("%d ", matrix[i * size + j]); 
 		}
@@ -38,7 +38,7 @@ void printMatrix(int* matrix, int size)
 void printVector(int* vector, int size)
 {
 	printf("%d * 1 Vector:\n[ ",size);
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		printf("%d ", vector[i]); 
 		
@@ -63,7 +63,7 @@ void calVector(int* resultV, int* mymatrix, int* vector, int row)
 void printResult(int* vector, int size)
 {
 	printf("[");
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < 100; i++)
 	{
 		printf(" %d", vector[i]); 
 		
