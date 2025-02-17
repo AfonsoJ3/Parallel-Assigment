@@ -114,6 +114,9 @@ int main(int argc, char** argv)
 	calVector(myv, mym, v, row);
 	double calEnd = MPI_Wtime();
 
+	long long flops = row * (2 * SIZE - 1);
+	double flops_per_sec = flops / (calEnd - calStart;);
+
 	double gStart = MPI_Wtime();
 	MPI_Gather(myv, row, MPI_INT,  result, row, MPI_INT, 0, MPI_COMM_WORLD);
 	double gEnd = MPI_Wtime();
@@ -127,6 +130,7 @@ int main(int argc, char** argv)
 		printf(" %.10f -> Time that took to Scatter the matrix to all %d ranks.\n", scEnd - scStart, numranks);
 		printf(" %.10f -> Time that took to gather the vector to all %d ranks.\n", gEnd - gStart, rank);
 		printf(" %.10f -> Time that took to calculate the vector.\n", calEnd - calStart);
+		printf(" %.2f FLOPS (Floating Point Operations Per Second)\n", flops_per_sec);
 		
 		//free memory
 		free(result);
