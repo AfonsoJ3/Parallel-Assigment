@@ -4,7 +4,7 @@
 #include <time.h>
 
 //Change it to a bigger mumber. 
-#define SIZE 40000
+#define SIZE 30000
 
 void gen_matrix(int* matrix, int size)
 {
@@ -115,7 +115,7 @@ int main(int argc, char** argv)
 	double calEnd = MPI_Wtime();
 
 	long long flops = row * (2 * SIZE - 1);
-	double flops_per_sec = flops / (calEnd - calStart;);
+	double flops_per_sec = flops / (calEnd - calStart);
 
 	double gStart = MPI_Wtime();
 	MPI_Gather(myv, row, MPI_INT,  result, row, MPI_INT, 0, MPI_COMM_WORLD);

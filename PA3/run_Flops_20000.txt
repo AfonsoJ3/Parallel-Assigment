@@ -1,0 +1,430 @@
+Printing the first 10 elements!!!The size of matrix and vector are powers of 2.
+20000 * 20000 Matrix:
+[ 1409 18058 19537 19219 8200 5105 3011 2752 16217 9174 
+3796 3575 9675 12801 7576 5958 5842 10786 16771 19696 
+8849 7080 11050 18666 10750 5301 15723 15665 14729 14124 
+16995 9578 6265 887 4855 13332 12864 18036 4758 15162 
+847 18938 17904 17941 10555 8009 13733 3263 3600 16927 
+2067 13203 7644 14700 14335 1149 9103 5933 16322 4254 
+16595 6848 19287 6600 19249 14915 15383 9127 12852 2093 
+13156 18928 9549 12370 23 17639 7019 13471 9129 9886 
+5477 8386 12722 16153 8156 18774 8406 1559 18355 7791 
+3484 10973 7626 13096 14302 2784 3041 2514 9150 19749 
+]
+
+20000 * 1 Vector:
+[ 16707 3134 1645 15782 14561 15117 13736 4614 17628 19661 ]
+
+
+The final result
+20000 * 1 Vector:
+[ 1530787704 1033779002 1683015723 1968250888 -832514491 -1536200358 -2001628351 -797735921 -461767331 979756014 ]
+
+ 0.0000020158 -> Time that took to broadcastt the vector to all 1 ranks.
+ 0.6314757541 -> Time that took to Scatter the matrix to all 1 ranks.
+ 0.0000436660 -> Time that took to gather the vector to all 0 ranks.
+ 1.4534849888 -> Time that took to calculate the vector.
+ 550387521.15 FLOPS (Floating Point Operations Per Second)
+Printing the first 10 elements!!!The size of matrix and vector are powers of 2.
+20000 * 20000 Matrix:
+[ 6719 593 11304 13664 11027 1362 19631 1033 19959 5915 
+10552 15673 12219 5842 14074 16128 3110 647 634 19353 
+12315 11111 14094 13297 8152 13107 19558 12299 14117 7325 
+11552 8956 5115 3845 5561 19687 15403 6792 261 9987 
+9647 1700 19407 9959 12431 13526 11099 5255 14213 16034 
+6872 17021 11008 1942 18144 18596 9342 10706 1065 14583 
+7168 7610 16027 8886 16673 17275 11423 4719 9662 2075 
+580 6995 17301 9507 2573 2523 13349 535 14747 14159 
+9799 16786 16575 16110 719 988 11007 824 3450 19218 
+11063 5882 6573 1369 12686 9340 19892 12153 17122 1117 
+]
+
+20000 * 1 Vector:
+[ 1857 13737 8677 15712 9844 3581 16572 4723 14385 923 ]
+
+
+The final result
+20000 * 1 Vector:
+[ 429570818 1146872168 825312609 1887046065 690096418 1547999935 -1672586210 -1173154192 -613866894 1165704644 ]
+
+ 0.0033796183 -> Time that took to broadcastt the vector to all 2 ranks.
+ 1.0499504791 -> Time that took to Scatter the matrix to all 2 ranks.
+ 0.0189733543 -> Time that took to gather the vector to all 0 ranks.
+ 0.7326707249 -> Time that took to calculate the vector.
+ 545934191.76 FLOPS (Floating Point Operations Per Second)
+Printing the first 10 elements!!!The size of matrix and vector are powers of 2.
+20000 * 20000 Matrix:
+[ 656 5261 12399 3778 14717 8832 8443 16735 809 19919 
+14716 19931 15093 4638 7708 14489 18757 17729 5677 11455 
+6347 10840 7748 8024 11158 16094 10282 6033 14913 18358 
+16970 1593 5376 2011 5717 9408 476 17936 1783 16184 
+1822 10844 18755 2573 12054 18510 18971 18221 17846 5701 
+17812 13038 11967 11439 18222 15623 17455 64 1322 5817 
+408 5792 811 13014 14174 12145 18391 2512 13690 13911 
+6609 14225 19970 8351 9443 7046 2531 14031 17431 8969 
+4467 9052 4362 8318 19661 16873 3663 8798 5925 6821 
+8670 4112 2026 16596 17659 812 306 9344 5120 16923 
+]
+
+20000 * 1 Vector:
+[ 6917 7657 1989 3235 7179 7567 3227 17839 16381 1802 ]
+
+
+The final result
+20000 * 1 Vector:
+[ -339754758 1558266071 277488580 1535794560 -722792615 943108349 -1346089815 -391379827 132666292 -688742939 ]
+
+ 0.0110625299 -> Time that took to broadcastt the vector to all 4 ranks.
+ 1.2601770447 -> Time that took to Scatter the matrix to all 4 ranks.
+ 0.0006209491 -> Time that took to gather the vector to all 0 ranks.
+ 0.3880600696 -> Time that took to calculate the vector.
+ 515371241.84 FLOPS (Floating Point Operations Per Second)
+Printing the first 10 elements!!!The size of matrix and vector are powers of 2.
+20000 * 20000 Matrix:
+[ 13152 6256 15499 7121 17586 12941 208 1750 1214 1571 
+18878 7321 19493 12341 16566 17596 16824 5429 2509 2919 
+4518 12625 6912 14153 2951 12422 8379 22 13985 17428 
+4652 13463 3894 7606 12092 491 9305 417 13926 10142 
+17387 2585 15176 4860 6921 10049 13598 4489 7958 19431 
+15121 3663 13756 261 12665 16391 7574 1754 7076 14444 
+9202 242 8423 7563 756 14522 16037 19222 14449 9981 
+4217 1353 9694 17755 10030 14789 1656 19767 19961 17384 
+15045 18621 4718 3442 13965 9903 7945 861 10907 10302 
+9642 8510 8784 13899 1892 18079 2179 4008 11261 1802 
+]
+
+20000 * 1 Vector:
+[ 12026 9445 11330 5576 3793 6247 9902 15706 5012 14739 ]
+
+*** Error in `./PA3.x': double free or corruption (!prev): 0x0000000001e956a0 ***
+
+The final result
+20000 * 1 Vector:
+[ -1819105654 405567301 1019491274 -779131774 -794919771 -1772066388 -1465171588 -2059371220 -1414041495 1873356384 ]
+
+ 0.0097002778 -> Time that took to broadcastt the vector to all 6 ranks.
+ 1.3428728790 -> Time that took to Scatter the matrix to all 6 ranks.
+ 0.0009219069 -> Time that took to gather the vector to all 0 ranks.
+ 0.2534455289 -> Time that took to calculate the vector.
+ 526174861.21 FLOPS (Floating Point Operations Per Second)
+======= Backtrace: =========
+/lib/x86_64-linux-gnu/libc.so.6(+0x777e5)[0x7efcda87a7e5]
+/lib/x86_64-linux-gnu/libc.so.6(+0x8037a)[0x7efcda88337a]
+/lib/x86_64-linux-gnu/libc.so.6(cfree+0x4c)[0x7efcda88753c]
+./PA3.x[0x4011f2]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0)[0x7efcda823830]
+./PA3.x[0x400af9]
+======= Memory map: ========
+00400000-00402000 r-xp 00000000 00:30 19664052                           /home/afonsoj3/assignments/Parallel-Assigment/PA3/PA3.x
+00601000-00602000 r--p 00001000 00:30 19664052                           /home/afonsoj3/assignments/Parallel-Assigment/PA3/PA3.x
+00602000-00603000 rw-p 00002000 00:30 19664052                           /home/afonsoj3/assignments/Parallel-Assigment/PA3/PA3.x
+01d72000-01ef9000 rw-p 00000000 00:00 0                                  [heap]
+7efc54000000-7efc54021000 rw-p 00000000 00:00 0 
+7efc54021000-7efc58000000 ---p 00000000 00:00 0 
+7efc5b08a000-7efc5b0a0000 r-xp 00000000 fd:00 6947341                    /lib/x86_64-linux-gnu/libgcc_s.so.1
+7efc5b0a0000-7efc5b29f000 ---p 00016000 fd:00 6947341                    /lib/x86_64-linux-gnu/libgcc_s.so.1
+7efc5b29f000-7efc5b2a0000 rw-p 00015000 fd:00 6947341                    /lib/x86_64-linux-gnu/libgcc_s.so.1
+7efc5b2a0000-7efcca72e000 rw-p 00000000 00:00 0 
+7efcca72e000-7efcca734000 r-xp 00000000 00:30 22283039                   /opt/openmpi/lib/openmpi/mca_osc_sm.so
+7efcca734000-7efcca933000 ---p 00006000 00:30 22283039                   /opt/openmpi/lib/openmpi/mca_osc_sm.so
+7efcca933000-7efcca934000 r--p 00005000 00:30 22283039                   /opt/openmpi/lib/openmpi/mca_osc_sm.so
+7efcca934000-7efcca936000 rw-p 00006000 00:30 22283039                   /opt/openmpi/lib/openmpi/mca_osc_sm.so
+7efcca936000-7efcca952000 r-xp 00000000 00:30 22283041                   /opt/openmpi/lib/openmpi/mca_osc_pt2pt.so
+7efcca952000-7efccab51000 ---p 0001c000 00:30 22283041                   /opt/openmpi/lib/openmpi/mca_osc_pt2pt.so
+7efccab51000-7efccab52000 r--p 0001b000 00:30 22283041                   /opt/openmpi/lib/openmpi/mca_osc_pt2pt.so
+7efccab52000-7efccab53000 rw-p 0001c000 00:30 22283041                   /opt/openmpi/lib/openmpi/mca_osc_pt2pt.so
+7efccab53000-7efccab7f000 r-xp 00000000 00:30 22283043                   /opt/openmpi/lib/openmpi/mca_osc_rdma.so
+7efccab7f000-7efccad7f000 ---p 0002c000 00:30 22283043                   /opt/openmpi/lib/openmpi/mca_osc_rdma.so
+7efccad7f000-7efccad80000 r--p 0002c000 00:30 22283043                   /opt/openmpi/lib/openmpi/mca_osc_rdma.so
+7efccad80000-7efccad81000 rw-p 0002d000 00:30 22283043                   /opt/openmpi/lib/openmpi/mca_osc_rdma.so
+7efccad81000-7efccad85000 r-xp 00000000 00:30 22283007                   /opt/openmpi/lib/openmpi/mca_coll_inter.so
+7efccad85000-7efccaf84000 ---p 00004000 00:30 22283007                   /opt/openmpi/lib/openmpi/mca_coll_inter.so
+7efccaf84000-7efccaf85000 r--p 00003000 00:30 22283007                   /opt/openmpi/lib/openmpi/mca_coll_inter.so
+7efccaf85000-7efccaf86000 rw-p 00004000 00:30 22283007                   /opt/openmpi/lib/openmpi/mca_coll_inter.so
+7efccaf86000-7efccaf88000 r-xp 00000000 00:30 22283011                   /opt/openmpi/lib/openmpi/mca_coll_self.so
+7efccaf88000-7efccb188000 ---p 00002000 00:30 22283011                   /opt/openmpi/lib/openmpi/mca_coll_self.so
+7efccb188000-7efccb189000 r--p 00002000 00:30 22283011                   /opt/openmpi/lib/openmpi/mca_coll_self.so
+7efccb189000-7efccb18a000 rw-p 00003000 00:30 22283011                   /opt/openmpi/lib/openmpi/mca_coll_self.so
+7efccb18a000-7efccb199000 r-xp 00000000 00:30 22283019                   /opt/openmpi/lib/openmpi/mca_coll_tuned.so
+7efccb199000-7efccb398000 ---p 0000f000 00:30 22283019                   /opt/openmpi/lib/openmpi/mca_coll_tuned.so
+7efccb398000-7efccb399000 r--p 0000e000 00:30 22283019                   /opt/openmpi/lib/openmpi/mca_coll_tuned.so
+7efccb399000-7efccb39a000 rw-p 0000f000 00:30 22283019                   /opt/openmpi/lib/openmpi/mca_coll_tuned.so
+7efccb39a000-7efccb39c000 r-xp 00000000 00:30 22282269                   /opt/openmpi/lib/libmca_common_sm.so.40.0.0
+7efccb39c000-7efccb59b000 ---p 00002000 00:30 22282269                   /opt/openmpi/lib/libmca_common_sm.so.40.0.0
+7efccb59b000-7efccb59c000 r--p 00001000 00:30 22282269                   /opt/openmpi/lib/libmca_common_sm.so.40.0.0
+7efccb59c000-7efccb59d000 rw-p 00002000 00:30 22282269                   /opt/openmpi/lib/libmca_common_sm.so.40.0.0
+7efccb59d000-7efccb5a3000 r-xp 00000000 00:30 22283014                   /opt/openmpi/lib/openmpi/mca_coll_sm.so
+7efccb5a3000-7efccb7a2000 ---p 00006000 00:30 22283014                   /opt/openmpi/lib/openmpi/mca_coll_sm.so
+7efccb7a2000-7efccb7a3000 r--p 00005000 00:30 22283014                   /opt/openmpi/lib/openmpi/mca_coll_sm.so
+7efccb7a3000-7efccb7a4000 rw-p 00006000 00:30 22283014                   /opt/openmpi/lib/openmpi/mca_coll_sm.so
+7efccb7a4000-7efccb7b1000 r-xp 00000000 00:30 22283005                   /opt/openmpi/lib/openmpi/mca_coll_basic.so
+7efccb7b1000-7efccb9b1000 ---p 0000d000 00:30 22283005                   /opt/openmpi/lib/openmpi/mca_coll_basic.so
+7efccb9b1000-7efccb9b2000 r--p 0000d000 00:30 22283005                   /opt/openmpi/lib/openmpi/mca_coll_basic.so
+7efccb9b2000-7efccb9b3000 rw-p 0000e000 00:30 22283005                   /opt/openmpi/lib/openmpi/mca_coll_basic.so
+7efccb9b3000-7efccb9d1000 r-xp 00000000 00:30 22283009                   /opt/openmpi/lib/openmpi/mca_coll_libnbc.so
+7efccb9d1000-7efccbbd1000 ---p 0001e000 00:30 22283009                   /opt/openmpi/lib/openmpi/mca_coll_libnbc.so
+7efccbbd1000-7efccbbd2000 r--p 0001e000 00:30 22283009                   /opt/openmpi/lib/openmpi/mca_coll_libnbc.so
+7efccbbd2000-7efccbbd3000 rw-p 0001f000 00:30 22283009                   /opt/openmpi/lib/openmpi/mca_coll_libnbc.so
+7efccbdd8000-7efccbdff000 r-xp 00000000 00:30 22283050                   /opt/openmpi/lib/openmpi/mca_pml_ob1.so
+7efccbdff000-7efccbffe000 ---p 00027000 00:30 22283050                   /opt/openmpi/lib/openmpi/mca_pml_ob1.so
+7efccbffe000-7efccbfff000 r--p 00026000 00:30 22283050                   /opt/openmpi/lib/openmpi/mca_pml_ob1.so
+7efccbfff000-7efccc000000 rw-p 00027000 00:30 22283050                   /opt/openmpi/lib/openmpi/mca_pml_ob1.so
+7efccc000000-7efccc021000 rw-p 00000000 00:00 0 
+7efccc021000-7efcd0000000 ---p 00000000 00:00 0 
+7efcd00bf000-7efcd00ce000 r-xp 00000000 00:30 22282285                   /opt/openmpi/lib/openmpi/mca_btl_tcp.so
+7efcd00ce000-7efcd02cd000 ---p 0000f000 00:30 22282285                   /opt/openmpi/lib/openmpi/mca_btl_tcp.so
+7efcd02cd000-7efcd02ce000 r--p 0000e000 00:30 22282285                   /opt/openmpi/lib/openmpi/mca_btl_tcp.so
+7efcd02ce000-7efcd02d0000 rw-p 0000f000 00:30 22282285                   /opt/openmpi/lib/openmpi/mca_btl_tcp.so
+7efcd02d0000-7efcd02d3000 r-xp 00000000 00:30 22282279                   /opt/openmpi/lib/openmpi/mca_btl_self.so
+7efcd02d3000-7efcd04d3000 ---p 00003000 00:30 22282279                   /opt/openmpi/lib/openmpi/mca_btl_self.so
+7efcd04d3000-7efcd04d4000 r--p 00003000 00:30 22282279                   /opt/openmpi/lib/openmpi/mca_btl_self.so
+7efcd04d4000-7efcd04d5000 rw-p 00004000 00:30 22282279                   /opt/openmpi/lib/openmpi/mca_btl_self.so
+7efcd04da000-7efcd04dd000 r-xp 00000000 00:30 22283017                   /opt/openmpi/lib/openmpi/mca_coll_sync.so
+7efcd04dd000-7efcd06dd000 ---p 00003000 00:30 22283017                   /opt/openmpi/lib/openmpi/mca_coll_sync.so
+7efcd06dd000-7efcd06de000 r--p 00003000 00:30 22283017                   /opt/openmpi/lib/openmpi/mca_coll_sync.so
+7efcd06de000-7efcd06df000 rw-p 00004000 00:30 22283017                   /opt/openmpi/lib/openmpi/mca_coll_sync.so
+7efcd06df000-7efcd06e3000 r-xp 00000000 00:30 22283003                   /opt/openmpi/lib/openmpi/mca_bml_r2.so
+7efcd06e3000-7efcd08e2000 ---p 00004000 00:30 22283003                   /opt/openmpi/lib/openmpi/mca_bml_r2.so
+7efcd08e2000-7efcd08e3000 r--p 00003000 00:30 22283003                   /opt/openmpi/lib/openmpi/mca_bml_r2.so
+7efcd08e3000-7efcd08e4000 rw-p 00004000 00:30 22283003                   /opt/openmpi/lib/openmpi/mca_bml_r2.so
+7efcd08e4000-7efcd08e7000 r-xp 00000000 00:30 22282297                   /opt/openmpi/lib/openmpi/mca_mpool_hugepage.so
+7efcd08e7000-7efcd0ae6000 ---p 00003000 00:30 22282297                   /opt/openmpi/lib/openmpi/mca_mpool_hugepage.so
+7efcd0ae6000-7efcd0ae7000 r--p 00002000 00:30 22282297                   /opt/openmpi/lib/openmpi/mca_mpool_hugepage.so
+7efcd0ae7000-7efcd0ae8000 rw-p 00003000 00:30 22282297                   /opt/openmpi/lib/openmpi/mca_mpool_hugepage.so
+7efcd0ae8000-7efcd0aeb000 r-xp 00000000 00:30 22282331                   /opt/openmpi/lib/openmpi/mca_rcache_grdma.so
+7efcd0aeb000-7efcd0ceb000 ---p 00003000 00:30 22282331                   /opt/openmpi/lib/openmpi/mca_rcache_grdma.so
+7efcd0ceb000-7efcd0cec000 r--p 00003000 00:30 22282331                   /opt/openmpi/lib/openmpi/mca_rcache_grdma.so
+7efcd0cec000-7efcd0ced000 rw-p 00004000 00:30 22282331                   /opt/openmpi/lib/openmpi/mca_rcache_grdma.so
+7efcd0ced000-7efcd0cf0000 r-xp 00000000 00:30 22282275                   /opt/openmpi/lib/openmpi/mca_allocator_basic.so
+7efcd0cf0000-7efcd0eef000 ---p 00003000 00:30 22282275                   /opt/openmpi/lib/openmpi/mca_allocator_basic.so
+7efcd0eef000-7efcd0ef0000 r--p 00002000 00:30 22282275                   /opt/openmpi/lib/openmpi/mca_allocator_basic.so
+7efcd0ef0000-7efcd0ef1000 rw-p 00003000 00:30 22282275                   /opt/openmpi/lib/openmpi/mca_allocator_basic.so
+7efcd0ef1000-7efcd0ef4000 r-xp 00000000 00:30 22282449                   /opt/openmpi/lib/openmpi/mca_rml_oob.so
+7efcd0ef4000-7efcd10f3000 ---p 00003000 00:30 22282449                   /opt/openmpi/lib/openmpi/mca_rml_oob.so
+7efcd10f3000-7efcd10f4000 r--p 00002000 00:30 22282449                   /opt/openmpi/lib/openmpi/mca_rml_oob.so
+7efcd10f4000-7efcd10f5000 rw-p 00003000 00:30 22282449                   /opt/openmpi/lib/openmpi/mca_rml_oob.so
+7efcd10f5000-7efcd1108000 r-xp 00000000 00:30 22282415                   /opt/openmpi/lib/openmpi/mca_oob_tcp.so
+7efcd1108000-7efcd1307000 ---p 00013000 00:30 22282415                   /opt/openmpi/lib/openmpi/mca_oob_tcp.so
+7efcd1307000-7efcd1308000 r--p 00012000 00:30 22282415                   /opt/openmpi/lib/openmpi/mca_oob_tcp.so
+7efcd1308000-7efcd1309000 rw-p 00013000 00:30 22282415                   /opt/openmpi/lib/openmpi/mca_oob_tcp.so
+7efcd1309000-7efcd130b000 r-xp 00000000 00:30 22282453                   /opt/openmpi/lib/openmpi/mca_routed_debruijn.so
+7efcd130b000-7efcd150a000 ---p 00002000 00:30 22282453                   /opt/openmpi/lib/openmpi/mca_routed_debruijn.so
+7efcd150a000-7efcd150b000 r--p 00001000 00:30 22282453                   /opt/openmpi/lib/openmpi/mca_routed_debruijn.so
+7efcd150b000-7efcd150c000 rw-p 00002000 00:30 22282453                   /opt/openmpi/lib/openmpi/mca_routed_debruijn.so
+7efcd150c000-7efcd150e000 r-xp 00000000 00:30 22282451                   /opt/openmpi/lib/openmpi/mca_routed_binomial.so
+7efcd150e000-7efcd170e000 ---p 00002000 00:30 22282451                   /opt/openmpi/lib/openmpi/mca_routed_binomial.so
+7efcd170e000-7efcd170f000 r--p 00002000 00:30 22282451                   /opt/openmpi/lib/openmpi/mca_routed_binomial.so
+7efcd170f000-7efcd1710000 rw-p 00003000 00:30 22282451                   /opt/openmpi/lib/openmpi/mca_routed_binomial.so
+7efcd1710000-7efcd1712000 r-xp 00000000 00:30 22282455                   /opt/openmpi/lib/openmpi/mca_routed_direct.so
+7efcd1712000-7efcd1911000 ---p 00002000 00:30 22282455                   /opt/openmpi/lib/openmpi/mca_routed_direct.so
+7efcd1911000-7efcd1912000 r--p 00001000 00:30 22282455                   /opt/openmpi/lib/openmpi/mca_routed_direct.so
+7efcd1912000-7efcd1913000 rw-p 00002000 00:30 22282455                   /opt/openmpi/lib/openmpi/mca_routed_direct.so
+7efcd1913000-7efcd1915000 r-xp 00000000 00:30 22282457                   /opt/openmpi/lib/openmpi/mca_routed_radix.so
+7efcd1915000-7efcd1b15000 ---p 00002000 00:30 22282457                   /opt/openmpi/lib/openmpi/mca_routed_radix.so
+7efcd1b15000-7efcd1b16000 r--p 00002000 00:30 22282457                   /opt/openmpi/lib/openmpi/mca_routed_radix.so
+7efcd1b16000-7efcd1b17000 rw-p 00003000 00:30 22282457                   /opt/openmpi/lib/openmpi/mca_routed_radix.so
+7efcd1b17000-7efcd1b19000 r-xp 00000000 00:30 22282376                   /opt/openmpi/lib/openmpi/mca_errmgr_default_app.so
+7efcd1b19000-7efcd1d18000 ---p 00002000 00:30 22282376                   /opt/openmpi/lib/openmpi/mca_errmgr_default_app.so
+7efcd1d18000-7efcd1d19000 r--p 00001000 00:30 22282376                   /opt/openmpi/lib/openmpi/mca_errmgr_default_app.so
+7efcd1d19000-7efcd1d1a000 rw-p 00002000 00:30 22282376                   /opt/openmpi/lib/openmpi/mca_errmgr_default_app.so
+7efcd1d1a000-7efcd1d1c000 r-xp 00000000 00:30 22282469                   /opt/openmpi/lib/openmpi/mca_state_app.so
+7efcd1d1c000-7efcd1f1b000 ---p 00002000 00:30 22282469                   /opt/openmpi/lib/openmpi/mca_state_app.so
+7efcd1f1b000-7efcd1f1c000 r--p 00001000 00:30 22282469                   /opt/openmpi/lib/openmpi/mca_state_app.so
+7efcd1f1c000-7efcd1f1d000 rw-p 00002000 00:30 22282469                   /opt/openmpi/lib/openmpi/mca_state_app.so
+7efcd1f1d000-7efcd1f1e000 r-xp 00000000 00:30 22282282                   /opt/openmpi/lib/openmpi/mca_btl_sm.so
+7efcd1f1e000-7efcd211d000 ---p 00001000 00:30 22282282                   /opt/openmpi/lib/openmpi/mca_btl_sm.so
+7efcd211d000-7efcd211e000 r--p 00000000 00:30 22282282                   /opt/openmpi/lib/openmpi/mca_btl_sm.so
+7efcd211e000-7efcd211f000 rw-p 00001000 00:30 22282282                   /opt/openmpi/lib/openmpi/mca_btl_sm.so
+7efcd211f000-7efcd2121000 r-xp 00000000 00:30 22282277                   /opt/openmpi/lib/openmpi/mca_allocator_bucket.so
+7efcd2121000-7efcd2320000 ---p 00002000 00:30 22282277                   /opt/openmpi/lib/openmpi/mca_allocator_bucket.so
+7efcd2320000-7efcd2321000 r--p 00001000 00:30 22282277                   /opt/openmpi/lib/openmpi/mca_allocator_bucket.so
+7efcd2321000-7efcd2322000 rw-p 00002000 00:30 22282277                   /opt/openmpi/lib/openmpi/mca_allocator_bucket.so
+7efcd2322000-7efcd2329000 r-xp 00000000 00:30 22282370                   /opt/openmpi/lib/openmpi/mca_dfs_app.so
+7efcd2329000-7efcd2528000 ---p 00007000 00:30 22282370                   /opt/openmpi/lib/openmpi/mca_dfs_app.so
+7efcd2528000-7efcd2529000 r--p 00006000 00:30 22282370                   /opt/openmpi/lib/openmpi/mca_dfs_app.so
+7efcd2529000-7efcd252a000 rw-p 00007000 00:30 22282370                   /opt/openmpi/lib/openmpi/mca_dfs_app.so
+7efcd252a000-7efcd252f000 r-xp 00000000 00:30 22282401                   /opt/openmpi/lib/openmpi/mca_grpcomm_direct.so
+7efcd252f000-7efcd272e000 ---p 00005000 00:30 22282401                   /opt/openmpi/lib/openmpi/mca_grpcomm_direct.so
+7efcd272e000-7efcd272f000 r--p 00004000 00:30 22282401                   /opt/openmpi/lib/openmpi/mca_grpcomm_direct.so
+7efcd272f000-7efcd2730000 rw-p 00005000 00:30 22282401                   /opt/openmpi/lib/openmpi/mca_grpcomm_direct.so
+7efcd2730000-7efcd2b30000 r--s 00000000 fd:00 22413353                   /tmp/ompi.zarya.13000/pid.39509/pmix_dstor_39509/smdataseg-3070492673-0
+7efcd2b30000-7efcd2f30000 r--s 00000000 fd:00 22413352                   /tmp/ompi.zarya.13000/pid.39509/pmix_dstor_39509/smseg-3070492673-0
+7efcd2f30000-7efcd2f31000 ---p 00000000 00:00 0 
+7efcd2f31000-7efcd3731000 rw-p 00000000 00:00 0 
+7efcd3731000-7efcd3732000 r-xp 00000000 00:30 22282314                   /opt/openmpi/lib/pmix/mca_psec_none.so
+7efcd3732000-7efcd3931000 ---p 00001000 00:30 22282314                   /opt/openmpi/lib/pmix/mca_psec_none.so
+7efcd3931000-7efcd3932000 r--p 00000000 00:30 22282314                   /opt/openmpi/lib/pmix/mca_psec_none.so
+7efcd3932000-7efcd3933000 rw-p 00001000 00:30 22282314                   /opt/openmpi/lib/pmix/mca_psec_none.so
+7efcd3933000-7efcd3935000 r-xp 00000000 00:30 22282312                   /opt/openmpi/lib/pmix/mca_psec_native.so
+7efcd3935000-7efcd3b34000 ---p 00002000 00:30 22282312                   /opt/openmpi/lib/pmix/mca_psec_native.so
+7efcd3b34000-7efcd3b35000 r--p 00001000 00:30 22282312                   /opt/openmpi/lib/pmix/mca_psec_native.so
+7efcd3b35000-7efcd3b36000 rw-p 00002000 00:30 22282312                   /opt/openmpi/lib/pmix/mca_psec_native.so
+7efcd3b36000-7efcd3b3b000 r-xp 00000000 00:30 22282324                   /opt/openmpi/lib/pmix/mca_ptl_usock.so
+7efcd3b3b000-7efcd3d3a000 ---p 00005000 00:30 22282324                   /opt/openmpi/lib/pmix/mca_ptl_usock.so
+7efcd3d3a000-7efcd3d3b000 r--p 00004000 00:30 22282324                   /opt/openmpi/lib/pmix/mca_ptl_usock.so
+7efcd3d3b000-7efcd3d3c000 rw-p 00005000 00:30 22282324                   /opt/openmpi/lib/pmix/mca_ptl_usock.so
+7efcd3d3c000-7efcd3df9000 r-xp 00000000 00:30 22282327                   /opt/openmpi/lib/openmpi/mca_pmix_pmix2x.so
+7efcd3df9000-7efcd3ff8000 ---p 000bd000 00:30 22282327                   /opt/openmpi/lib/openmpi/mca_pmix_pmix2x.so
+7efcd3ff8000-7efcd3ffa000 r--p 000bc000 00:30 22282327                   /opt/openmpi/lib/openmpi/mca_pmix_pmix2x.so
+7efcd3ffa000-7efcd3ffe000 rw-p 000be000 00:30 22282327                   /opt/openmpi/lib/openmpi/mca_pmix_pmix2x.so
+7efcd3ffe000-7efcd4000000 rw-p 00000000 00:00 0 
+7efcd4000000-7efcd4021000 rw-p 00000000 00:00 0 
+7efcd4021000-7efcd8000000 ---p 00000000 00:00 0 
+7efcd80ef000-7efcd80f8000 r-xp 00000000 00:30 22282322                   /opt/openmpi/lib/pmix/mca_ptl_tcp.so
+7efcd80f8000-7efcd82f7000 ---p 00009000 00:30 22282322                   /opt/openmpi/lib/pmix/mca_ptl_tcp.so
+7efcd82f7000-7efcd82f8000 r--p 00008000 00:30 22282322                   /opt/openmpi/lib/pmix/mca_ptl_tcp.so
+7efcd82f8000-7efcd82f9000 rw-p 00009000 00:30 22282322                   /opt/openmpi/lib/pmix/mca_ptl_tcp.so
+7efcd82f9000-7efcd82fa000 ---p 00000000 00:00 0 
+7efcd82fa000-7efcd8afa000 rw-p 00000000 00:00 0 
+7efcd8afa000-7efcd8afe000 r-xp 00000000 00:30 22282390                   /opt/openmpi/lib/openmpi/mca_ess_pmi.so
+7efcd8afe000-7efcd8cfd000 ---p 00004000 00:30 22282390                   /opt/openmpi/lib/openmpi/mca_ess_pmi.so
+7efcd8cfd000-7efcd8cfe000 r--p 00003000 00:30 22282390                   /opt/openmpi/lib/openmpi/mca_ess_pmi.so
+7efcd8cfe000-7efcd8cff000 rw-p 00004000 00:30 22282390                   /opt/openmpi/lib/openmpi/mca_ess_pmi.so
+7efcd8cff000-7efcd8d00000 r-xp 00000000 00:30 22282461                   /opt/openmpi/lib/openmpi/mca_schizo_flux.so
+7efcd8d00000-7efcd8f00000 ---p 00001000 00:30 22282461                   /opt/openmpi/lib/openmpi/mca_schizo_flux.so
+7efcd8f00000-7efcd8f01000 r--p 00001000 00:30 22282461                   /opt/openmpi/lib/openmpi/mca_schizo_flux.so
+7efcd8f01000-7efcd8f02000 rw-p 00002000 00:30 22282461                   /opt/openmpi/lib/openmpi/mca_schizo_flux.so
+7efcd8f02000-7efcd8f04000 r-xp 00000000 00:30 22282467                   /opt/openmpi/lib/openmpi/mca_schizo_slurm.so
+7efcd8f04000-7efcd9103000 ---p 00002000 00:30 22282467                   /opt/openmpi/lib/openmpi/mca_schizo_slurm.so
+7efcd9103000-7efcd9104000 r--p 00001000 00:30 22282467                   /opt/openmpi/lib/openmpi/mca_schizo_slurm.so
+7efcd9104000-7efcd9105000 rw-p 00002000 00:30 22282467                   /opt/openmpi/lib/openmpi/mca_schizo_slurm.so
+7efcd9105000-7efcd910d000 r-xp 00000000 00:30 22282463                   /opt/openmpi/lib/openmpi/mca_schizo_ompi.so
+7efcd910d000-7efcd930c000 ---p 00008000 00:30 22282463                   /opt/openmpi/lib/openmpi/mca_schizo_ompi.so
+7efcd930c000-7efcd930d000 r--p 00007000 00:30 22282463                   /opt/openmpi/lib/openmpi/mca_schizo_ompi.so
+7efcd930d000-7efcd930f000 rw-p 00008000 00:30 22282463                   /opt/openmpi/lib/openmpi/mca_schizo_ompi.so
+7efcd930f000-7efcd9312000 r-xp 00000000 00:30 22282334                   /opt/openmpi/lib/openmpi/mca_shmem_mmap.so
+7efcd9312000-7efcd9511000 ---p 00003000 00:30 22282334                   /opt/openmpi/lib/openmpi/mca_shmem_mmap.so
+7efcd9511000-7efcd9512000 r--p 00002000 00:30 22282334                   /opt/openmpi/lib/openmpi/mca_shmem_mmap.so
+7efcd9512000-7efcd9513000 rw-p 00003000 00:30 22282334                   /opt/openmpi/lib/openmpi/mca_shmem_mmap.so
+7efcd9513000-7efcd9514000 r-xp 00000000 00:30 22282465                   /opt/openmpi/lib/openmpi/mca_schizo_orte.so
+7efcd9514000-7efcd9714000 ---p 00001000 00:30 22282465                   /opt/openmpi/lib/openmpi/mca_schizo_orte.so
+7efcd9714000-7efcd9715000 r--p 00001000 00:30 22282465                   /opt/openmpi/lib/openmpi/mca_schizo_orte.so
+7efcd9715000-7efcd9716000 rw-p 00002000 00:30 22282465                   /opt/openmpi/lib/openmpi/mca_schizo_orte.so
+7efcd9716000-7efcd9718000 r-xp 00000000 fd:00 6951350                    /lib/x86_64-linux-gnu/libutil-2.23.so
+7efcd9718000-7efcd9917000 ---p 00002000 fd:00 6951350                    /lib/x86_64-linux-gnu/libutil-2.23.so
+7efcd9917000-7efcd9918000 r--p 00001000 fd:00 6951350                    /lib/x86_64-linux-gnu/libutil-2.23.so
+7efcd9918000-7efcd9919000 rw-p 00002000 fd:00 6951350                    /lib/x86_64-linux-gnu/libutil-2.23.so
+7efcd9919000-7efcd991c000 r-xp 00000000 fd:00 6951345                    /lib/x86_64-linux-gnu/libdl-2.23.so
+7efcd991c000-7efcd9b1b000 ---p 00003000 fd:00 6951345                    /lib/x86_64-linux-gnu/libdl-2.23.so
+7efcd9b1b000-7efcd9b1c000 r--p 00002000 fd:00 6951345                    /lib/x86_64-linux-gnu/libdl-2.23.so
+7efcd9b1c000-7efcd9b1d000 rw-p 00003000 fd:00 6951345                    /lib/x86_64-linux-gnu/libdl-2.23.so
+7efcd9b1d000-7efcd9b35000 r-xp 00000000 fd:00 6951342                    /lib/x86_64-linux-gnu/libpthread-2.23.so
+7efcd9b35000-7efcd9d34000 ---p 00018000 fd:00 6951342                    /lib/x86_64-linux-gnu/libpthread-2.23.so
+7efcd9d34000-7efcd9d35000 r--p 00017000 fd:00 6951342                    /lib/x86_64-linux-gnu/libpthread-2.23.so
+7efcd9d35000-7efcd9d36000 rw-p 00018000 fd:00 6951342                    /lib/x86_64-linux-gnu/libpthread-2.23.so
+7efcd9d36000-7efcd9d3a000 rw-p 00000000 00:00 0 
+7efcd9d3a000-7efcd9e42000 r-xp 00000000 fd:00 6951339                    /lib/x86_64-linux-gnu/libm-2.23.so
+7efcd9e42000-7efcda041000 ---p 00108000 fd:00 6951339                    /lib/x86_64-linux-gnu/libm-2.23.so
+7efcda041000-7efcda042000 r--p 00107000 fd:00 6951339                    /lib/x86_64-linux-gnu/libm-2.23.so
+7efcda042000-7efcda043000 rw-p 00108000 fd:00 6951339                    /lib/x86_64-linux-gnu/libm-2.23.so
+7efcda043000-7efcda04a000 r-xp 00000000 fd:00 6951361                    /lib/x86_64-linux-gnu/librt-2.23.so
+7efcda04a000-7efcda249000 ---p 00007000 fd:00 6951361                    /lib/x86_64-linux-gnu/librt-2.23.so
+7efcda249000-7efcda24a000 r--p 00006000 fd:00 6951361                    /lib/x86_64-linux-gnu/librt-2.23.so
+7efcda24a000-7efcda24b000 rw-p 00007000 fd:00 6951361                    /lib/x86_64-linux-gnu/librt-2.23.so
+7efcda24b000-7efcda33f000 r-xp 00000000 00:30 22282263                   /opt/openmpi/lib/libopen-pal.so.40.1.0
+7efcda33f000-7efcda53f000 ---p 000f4000 00:30 22282263                   /opt/openmpi/lib/libopen-pal.so.40.1.0
+7efcda53f000-7efcda542000 r--p 000f4000 00:30 22282263                   /opt/openmpi/lib/libopen-pal.so.40.1.0
+7efcda542000-7efcda548000 rw-p 000f7000 00:30 22282263                   /opt/openmpi/lib/libopen-pal.so.40.1.0
+7efcda548000-7efcda54f000 rw-p 00000000 00:00 0 
+7efcda54f000-7efcda5fc000 r-xp 00000000 00:30 22282360                   /opt/openmpi/lib/libopen-rte.so.40.0.1
+7efcda5fc000-7efcda7fb000 ---p 000ad000 00:30 22282360                   /opt/openmpi/lib/libopen-rte.so.40.0.1
+7efcda7fb000-7efcda7fd000 r--p 000ac000 00:30 22282360                   /opt/openmpi/lib/libopen-rte.so.40.0.1
+7efcda7fd000-7efcda801000 rw-p 000ae000 00:30 22282360                   /opt/openmpi/lib/libopen-rte.so.40.0.1
+7efcda801000-7efcda803000 rw-p 00000000 00:00 0 
+7efcda803000-7efcda9c3000 r-xp 00000000 fd:00 6951343                    /lib/x86_64-linux-gnu/libc-2.23.so
+7efcda9c3000-7efcdabc3000 ---p 001c0000 fd:00 6951343                    /lib/x86_64-linux-gnu/libc-2.23.so
+7efcdabc3000-7efcdabc7000 r--p 001c0000 fd:00 6951343                    /lib/x86_64-linux-gnu/libc-2.23.so
+7efcdabc7000-7efcdabc9000 rw-p 001c4000 fd:00 6951343                    /lib/x86_64-linux-gnu/libc-2.23.so
+7efcdabc9000-7efcdabcd000 rw-p 00000000 00:00 0 
+7efcdabcd000-7efcdacab000 r-xp 00000000 00:30 22282554                   /opt/openmpi/lib/libmpi.so.40.0.1
+7efcdacab000-7efcdaeab000 ---p 000de000 00:30 22282554                   /opt/openmpi/lib/libmpi.so.40.0.1
+7efcdaeab000-7efcdaeac000 r--p 000de000 00:30 22282554                   /opt/openmpi/lib/libmpi.so.40.0.1
+7efcdaeac000-7efcdaebd000 rw-p 000df000 00:30 22282554                   /opt/openmpi/lib/libmpi.so.40.0.1
+7efcdaebd000-7efcdaece000 rw-p 00000000 00:00 0 
+7efcdaece000-7efcdaef4000 r-xp 00000000 fd:00 6951341                    /lib/x86_64-linux-gnu/ld-2.23.so
+7efcdaf3c000-7efcdb0e6000 rw-p 00000000 00:00 0 
+7efcdb0ef000-7efcdb0f0000 rw-p 00000000 00:00 0 
+7efcdb0f0000-7efcdb0f1000 rw-s 00000000 fd:00 22413350                   /tmp/ompi.zarya.13000/pid.39509/pmix_dstor_39509/dstore_sm.lock
+7efcdb0f1000-7efcdb0f2000 r--s 00000000 fd:00 22413349                   /tmp/ompi.zarya.13000/pid.39509/pmix_dstor_39509/initial-pmix_shared-segment-0
+7efcdb0f2000-7efcdb0f3000 rw-p 00000000 00:00 0 
+7efcdb0f3000-7efcdb0f4000 r--p 00025000 fd:00 6951341                    /lib/x86_64-linux-gnu/ld-2.23.so
+7efcdb0f4000-7efcdb0f5000 rw-p 00026000 fd:00 6951341                    /lib/x86_64-linux-gnu/ld-2.23.so
+7efcdb0f5000-7efcdb0f6000 rw-p 00000000 00:00 0 
+7ffe75a7f000-7ffe75b02000 rw-p 00000000 00:00 0                          [stack]
+7ffe75b2a000-7ffe75b2d000 r--p 00000000 00:00 0                          [vvar]
+7ffe75b2d000-7ffe75b2f000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+[zarya:39532] *** Process received signal ***
+[zarya:39532] Signal: Aborted (6)
+[zarya:39532] Signal code:  (-6)
+[zarya:39532] [ 0] /lib/x86_64-linux-gnu/libc.so.6(+0x354b0)[0x7efcda8384b0]
+[zarya:39532] [ 1] /lib/x86_64-linux-gnu/libc.so.6(gsignal+0x38)[0x7efcda838428]
+[zarya:39532] [ 2] /lib/x86_64-linux-gnu/libc.so.6(abort+0x16a)[0x7efcda83a02a]
+[zarya:39532] [ 3] /lib/x86_64-linux-gnu/libc.so.6(+0x777ea)[0x7efcda87a7ea]
+[zarya:39532] [ 4] /lib/x86_64-linux-gnu/libc.so.6(+0x8037a)[0x7efcda88337a]
+[zarya:39532] [ 5] /lib/x86_64-linux-gnu/libc.so.6(cfree+0x4c)[0x7efcda88753c]
+[zarya:39532] [ 6] ./PA3.x[0x4011f2]
+[zarya:39532] [ 7] /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0)[0x7efcda823830]
+[zarya:39532] [ 8] ./PA3.x[0x400af9]
+[zarya:39532] *** End of error message ***
+-------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+-------------------------------------------------------
+--------------------------------------------------------------------------
+mpiexec noticed that process rank 0 with PID 0 on node zarya exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+Printing the first 10 elements!!!The size of matrix and vector are powers of 2.
+20000 * 20000 Matrix:
+[ 1755 2174 15718 18025 18350 4396 14923 19519 18274 9975 
+6032 14733 1462 11937 16466 2000 11127 4587 6985 7546 
+13551 7793 12782 889 16500 14763 6483 15409 10325 591 
+16185 9987 16427 3924 3540 11285 16571 19748 13872 7458 
+10110 4660 3828 1211 3082 9054 8993 9422 18363 8728 
+9715 158 11242 187 5984 19405 2876 19074 15636 4214 
+13344 8848 3387 13098 1074 14022 11701 18839 4185 17540 
+7426 16654 310 3505 19657 15633 16977 16905 797 16183 
+16284 7619 14823 11942 2064 16534 11141 14595 17047 12417 
+16391 1810 13563 4142 1813 12369 3091 6443 13587 5484 
+]
+
+20000 * 1 Vector:
+[ 4904 19184 17064 11063 17179 8107 16849 17506 14837 743 ]
+
+
+The final result
+20000 * 1 Vector:
+[ -896151736 2105193688 -1767397832 -218149883 78160334 105929396 -455686322 -1096795003 -132213300 -875815030 ]
+
+ 0.0108762812 -> Time that took to broadcastt the vector to all 8 ranks.
+ 1.3669814849 -> Time that took to Scatter the matrix to all 8 ranks.
+ 0.0012780260 -> Time that took to gather the vector to all 0 ranks.
+ 0.1872239020 -> Time that took to calculate the vector.
+ 534106483.98 FLOPS (Floating Point Operations Per Second)
+Printing the first 10 elements!!!The size of matrix and vector are powers of 2.
+20000 * 20000 Matrix:
+[ 9897 13198 15189 6022 1398 15475 6779 8402 2551 5767 
+14368 10120 16567 14898 7058 4286 7756 7565 8901 4923 
+9144 14551 575 15668 8865 19156 1699 4605 14579 8836 
+16576 14529 19450 4080 16409 3203 3225 15824 9144 10768 
+14785 6269 15584 843 16687 13081 11646 2656 14833 3152 
+16348 3826 2880 11964 12574 3050 8744 19982 14596 1925 
+16052 11579 14888 10876 1159 16156 15622 15346 17300 17236 
+429 612 18927 15794 6213 14088 1437 13043 1154 18209 
+3987 6788 18840 7674 2014 18844 6161 11529 5059 6588 
+14026 11094 7607 7003 16173 7671 9925 10193 3925 9886 
+]
+
+20000 * 1 Vector:
+[ 3324 3413 13931 9872 619 9551 7597 5175 18964 5529 ]
+
+
+The final result
+20000 * 1 Vector:
+[ -42937252 1632282449 232773859 1760800599 1514419950 -1550486368 1586456807 -1501113201 1423255811 -638657596 ]
+
+ 0.0175520629 -> Time that took to broadcastt the vector to all 10 ranks.
+ 1.3854476940 -> Time that took to Scatter the matrix to all 10 ranks.
+ 0.0837879591 -> Time that took to gather the vector to all 0 ranks.
+ 0.1551951268 -> Time that took to calculate the vector.
+ 515467216.41 FLOPS (Floating Point Operations Per Second)
