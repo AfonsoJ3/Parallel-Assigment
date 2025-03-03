@@ -58,12 +58,11 @@ int main(int argc, char* argv[])
             int index = i * width + j;
             int sum = 0;
             int counter = 0;
-
             for(int u = -k; u <= k; u++)
             {
                 for (int v = -k; v <= k; v++)
                 {
-                    int cindex = (i - u) * width + (j - v);
+                    int cindex=(i-u)*width+(j-v);
                     if(i-u<0 || i-u>=height ||j-v<0 || j-v>=width)
                     {
                         continue;
@@ -78,8 +77,8 @@ int main(int argc, char* argv[])
         }
     }
 
-    MPI+MPI_Gather( temp + myStart * width 
-    , numRows * width, MPI_INT, temp, numRows * width, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Gather( temp + myStart * width, numRows * width, 
+    MPI_INT, temp, numRows * width, MPI_INT, 0, MPI_COMM_WORLD);
 
     if (rank == 0)
     {
