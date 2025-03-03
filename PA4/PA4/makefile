@@ -1,31 +1,27 @@
-CC = mpicc
+FCC = mpicc 
+LDA = mpicc
 CPP = mpic++
-LDC = mpicc
-LD_FLAGS = -lm -fopenmp -lstdc++ -lopencv_core -lopencv_highgui -lopencv_imgproc
-FLAGS = -fopenmp
-CPPFLAGS = -I/usr/include/opencv $(FLAGS)
-PROG = PA4.x
-RM = /bin/rm
+
+PROG = PA4.x 
+OBJ = imageTools.o PA4.o
+
+RM = rm -rf
+
 PBS_FILE = pbs_MPI
 
-# Object files
-OBJS = imageTools.o PA4.o
-
-# All rule
+#all rules:
 all: $(PROG)
 
-$(PROG): $(OBJS)
-	$(LDC) $(OBJS) $(LD_FLAGS) -o $(PROG)
+$(PROG): $(OBJ)
+	$(LDA) $(OBJ) -o $(PROG)
 
-# Rule for .c files
 %.o: %.c
-	$(CC) $(FLAGS) -c $^ -o $@
+	$(FCC) -c $< 
 
-# Rule for .cpp files
 %.o: %.cpp
-	$(CPP) $(CPPFLAGS) -c $^ -o $@
+	$(CPP) -c $<
 
-# PBS script
+#pbs script
 pbs:
 	echo "#!/bin/bash" > $(PBS_FILE)
 	echo "#PBS -l nodes=2:ppn=12" >> $(PBS_FILE)
@@ -36,6 +32,7 @@ pbs:
 	echo "cd \$$HOME" >> $(PBS_FILE)
 	echo "mpiexec -np 2 --map-by ppr:1:node --hostfile \$$PBS_NODEFILE ./*.x" >> $(PBS_FILE)
 
-# Clean rule
-clean:
-	$(RM) -rf *.o $(PROG) *.mod
+
+#clean
+clean: 
+	$(RM) *.o *.x first_run.*		
