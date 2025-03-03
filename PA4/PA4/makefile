@@ -1,6 +1,7 @@
 FCC = mpicc 
 LDA = mpicc
 CPP = mpic++
+LD_FLAGS = -lm -fopenmp -lstdc++ -lopencv_core -lopencv_highgui -lopencv_imgproc
 
 PROG = PA4.x 
 OBJ = imageTools.o PA4.o
@@ -13,7 +14,7 @@ PBS_FILE = pbs_MPI
 all: $(PROG)
 
 $(PROG): $(OBJ)
-	$(LDA) $(OBJ) -o $(PROG)
+	$(LDA) $(OBJ) $(LD_FLAGS) -o $(PROG)
 
 %.o: %.c
 	$(FCC) -c $< 
