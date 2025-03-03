@@ -4,7 +4,7 @@
 #include "mpi.h"
 
 extern int* imageToMat(char* name, int* dims);
-extern void matToImage(char* namem int* mat, int* dims);
+extern void matToImage(char* name, int* mat, int* dims);
 
 int main(int argc, char* argv[])
 {
@@ -34,15 +34,15 @@ int main(int argc, char* argv[])
 
     if (rank != 0)
     {
-        int* matrix = (int*) malloc(h*w*sizeof(int)); //memory alocation non root ranks
+        matrix = (int*) malloc(height*width*sizeof(int)); //memory alocation non root ranks
     }
 
-    MPI_Bcast(matrix, h * w, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(matrix, height * width, MPI_INT, 0, MPI_COMM_WORLD);
 
     if (rank == 0)
     {
         printf("The height of image.jpg is: %d\n", height);
-        printf("The width of image.jpg is: %d\n", height);
+        printf("The width of image.jpg is: %d\n", width);
 
     }
 
