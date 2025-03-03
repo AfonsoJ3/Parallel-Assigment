@@ -78,10 +78,12 @@ int main(int argc, char* argv[])
         }
     }
 
-    matToImage("processedImage.jpg", temp, dims);
+    MPI+MPI_Gather( temp + myStart * width 
+    , numRows * width, MPI_INT, temp, numRows * width, MPI_INT, 0, MPI_COMM_WORLD);
 
     if (rank == 0)
     {
+        matToImage("processedImage.jpg", temp, dims);
         printf("\nThe height of image.jpg is: %d\n", height);
         printf("The width of image.jpg is: %d\n", width);
 
