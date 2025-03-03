@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
         {
             int index = j * width * i;
             int sum = 0;
-            int coumter = 0;
+            int counter = 0;
 
             for(int u = -k; u <= k; u++)
             {
@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    matToImage("processedImage.jpg"; temp; dims);
+    matToImage("processedImage.jpg", temp, dims);
 
     if (rank == 0)
     {
