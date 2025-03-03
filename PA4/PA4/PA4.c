@@ -39,9 +39,50 @@ int main(int argc, char* argv[])
 
     MPI_Bcast(matrix, height * width, MPI_INT, 0, MPI_COMM_WORLD);
 
+    int numRows = height / numranks;
+    int myStart = rank * numRows;
+    int myEnd = myStart + numRows;
+
+    if (rank == numranks - 1)
+    {
+        myEnd = height;
+    }
+
+    int k = 10;
+    temp=(int*) malloc(height*width*sizeof(int));
+
+    for(int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            int index = j * width * i;
+            int sum = 0;
+            int coumter = 0;
+
+            for(int u = -k; u <= k; u++)
+            {
+                for (int v = -k; v <= k; v++)
+                {
+                    int cindex = (i - u) * width + (j - v);
+                    if(i-u<0 || i-u>=height ||j-v<0 || j-v>=width)
+                    {
+                        continue;
+                    }
+                    sum+=matrix[cindex];
+                    counter++;
+                }
+                
+            }
+
+            temp[index] = sum / coumter;
+        }
+    }
+
+    matToImage("processedImage.jpg"; temp; dims);
+
     if (rank == 0)
     {
-        printf("The height of image.jpg is: %d\n", height);
+        printf("\nThe height of image.jpg is: %d\n", height);
         printf("The width of image.jpg is: %d\n", width);
 
     }
