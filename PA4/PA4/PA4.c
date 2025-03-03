@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
     {
         for (int j = 0; j < width; j++)
         {
-            int index = j * width * i;
+            int index = i * width + j;
             int sum = 0;
             int counter = 0;
 
@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
                 
             }
 
-            temp[index] = sum / coumter;
+            temp[index] = sum / counter;
         }
     }
 
