@@ -8,7 +8,7 @@ extern void matToImage(char* name, int* mat, int* dims);
 
 int main(int argc, char* argv[])
 {
-    int* matrix;
+    int* matrix = NULL;
     //int* m;
     int* temp; //temporary file
     char* name = "image.jpg"; // fale name.
@@ -30,7 +30,13 @@ int main(int argc, char* argv[])
     }
 
     MPI_Bcast(&height, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&width, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&width, 1, MPI_INT, 0, MPI_COMM_WORLD);        
+
+    if (rank != 0) {
+        matrix = (int*) malloc(height * width * sizeof(int));
+    }
+
+    
     MPI_Bcast(matrix, height * width, MPI_INT, 0, MPI_COMM_WORLD);
 
     int numRows = height / numranks;
