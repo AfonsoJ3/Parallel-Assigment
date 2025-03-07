@@ -93,7 +93,6 @@ int main(int argc, char* argv[])
         free(matrix);
     }
 
-    free(m);
     free(dims);
     free(temp);
 
