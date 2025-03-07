@@ -9,7 +9,7 @@ extern void matToImage(char* name, int* mat, int* dims);
 int main(int argc, char* argv[])
 {
     int* matrix;
-    int* m;
+    //int* m;
     int* temp; //temporary file
     char* name = "image.jpg"; // fale name.
     int* dims = (int*) malloc(2*sizeof(int)); //image dimension
@@ -24,19 +24,13 @@ int main(int argc, char* argv[])
 
     if (rank == 0)
     {
-        m = imageToMat(name, dims);
+        matrix = imageToMat(name, dims);
         height = dims[0];
         width = dims[1];
     }
 
     MPI_Bcast(&height, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&width, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
-    if (rank != 0)
-    {
-        matrix = (int*) malloc(height*width*sizeof(int)); //memory alocation non root ranks
-    }
-
     MPI_Bcast(matrix, height * width, MPI_INT, 0, MPI_COMM_WORLD);
 
     int numRows = height / numranks;
