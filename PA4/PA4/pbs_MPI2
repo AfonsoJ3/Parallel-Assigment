@@ -5,5 +5,5 @@
 #PBS -N first_run
 #PBS -j oe
 cd ~/assignments/Parallel-Assigment/PA4/PA4
-mpiexec -np 1 --map-by ppr:1:node --hostfile $PBS_NODEFILE ./*.x
-mpiexec -np 2 --map-by ppr:1:node --hostfile $PBS_NODEFILE ./*.x
+mpiexec -np 4 --map-by ppr:1:node --hostfile $PBS_NODEFILE ./*.x
+mpiexec -np 6 --map-by ppr:1:node --hostfile $PBS_NODEFILE ./*.x
