@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
         myEnd = height;
     }
 
-    int k = 20;
+    int k = 10;
     temp=(int*) malloc(height*width*sizeof(int));
 
     double calStart = MPI_Wtime(); 
