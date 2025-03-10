@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
     temp=(int*) malloc(height*width*sizeof(int));
 
     double calStart = MPI_Wtime();
-    for(int i = 0; i < height; i++)
+    for(int i = myStart; i < myEnd; i++)
     {
         for (int j = 0; j < width; j++)
         {
