@@ -95,26 +95,12 @@ int main(int argc, char* argv[])
     MPI_INT, temp, numRows * width, MPI_INT, 0, MPI_COMM_WORLD);
     double gEnd = MPI_Wtime();
 
-    double myCast = Bend - Bstart;
-    double myCast_m = Bend_m - Bstart_m;
-    double myCal = calEnd - calStart;
-    double myGather = gEnd - gStart;
-
-    MPI_Reduce(&myCast, &totalB , 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&myCast_m, &totalB_m, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&myCal, &totalcal , 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&myGather, &totalg , 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-
     if (rank == 0)
     {
-        totalB = (totalB + totalB_m)/ numranks;
-        totalcal = totalcal / numranks;
-        totalg = totalg / numranks;
-
         matToImage("processedImage.jpg", temp, dims);
-        printf("\nThe Bcast with %d ranks, took %.10f seconds\n", numranks, totalB);
-        printf("The calculation with %d ranks, took %.10f seconds\n", numranks, totalcal);
-        printf("The gather with %d ranks, took %.10f seconds\n", numranks, totalg);
+        printf("\nThe Bcast with %d ranks, took %.10f seconds\n", numranks, (Bend-Bstart)+(Bend_m-Bstart));
+        printf("The calculation with %d ranks, took %.10f seconds\n", numranks, (calEnd - calStart));
+        printf("The gather with %d ranks, took %.10f seconds\n", numranks, (gEnd - gStart));
 
     }
 
