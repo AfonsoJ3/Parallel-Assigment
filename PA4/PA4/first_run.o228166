@@ -1,0 +1,12 @@
+Height: 8000
+Width : 12000
+
+The Bcast with 1 ranks, took 0.0000023982 seconds
+The calculation with 1 ranks, took 225.1377989156 seconds
+The gather with 1 ranks, took 0.0475417618 seconds
+Height: 8000
+Width : 12000
+
+The Bcast with 2 ranks, took 1.8691590368 seconds
+The calculation with 2 ranks, took 112.5724123139 seconds
+The gather with 2 ranks, took 0.2652985300 seconds
