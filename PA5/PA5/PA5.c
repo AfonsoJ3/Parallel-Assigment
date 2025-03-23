@@ -18,7 +18,7 @@ int main(int argc, char** argv)
     //Master 
     if (rank == 0)
     {
-        int numele=N/(numranks - 1);
+        int numele=n/(numranks - 1);
         int start, end;
 
         for(int i=1;i<numranks;i++)
