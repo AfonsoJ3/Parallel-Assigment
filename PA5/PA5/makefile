@@ -1,10 +1,8 @@
 FCC = mpicc 
 LDA = mpicc
-CPP = mpic++
-LD_FLAGS = -lm -fopenmp -lstdc++ -lopencv_core -lopencv_highgui -lopencv_imgproc
 
 PROG = PA5.x 
-OBJ = imageTools.o PA5.o
+OBJ = PA5.o
 
 RM = rm -rf
 
@@ -14,13 +12,10 @@ PBS_FILE = pbs_MPI
 all: $(PROG)
 
 $(PROG): $(OBJ)
-	$(LDA) $(OBJ) $(LD_FLAGS) -o $(PROG)
+	$(LDA) $(OBJ) -o $(PROG)
 
 %.o: %.c
 	$(FCC) -c $< 
-
-%.o: %.cpp
-	$(CPP) -c $<
 
 #pbs script
 pbs:

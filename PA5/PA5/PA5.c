@@ -27,7 +27,7 @@ int main(int argc, char** argv)
             end=start+numele-1;
             if(rank==numranks-1) 
             { 
-                end=N;
+                end=n;
             }
 
             MPI_Send(&start, 1, MPI_INT ,  i, 0, MPI_COMM_WORLD);
