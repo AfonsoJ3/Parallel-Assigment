@@ -40,7 +40,8 @@ int main(int argc, char** argv)
     double rankResult = 0;
     for (int i=1; i<numranks; i++)
     {
-        MPI_Recv(&rankResult,1,MPI_DOUBLE,i,0,MPI_COMM_WORLD,MPI_STATUS_I    GNORE);
+        MPI_Recv(&rankResult,1,MPI_DOUBLE,i,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+        result += rankResult;
     }
     printf("Number of Primes: %d\n",numprimes);
 
@@ -59,7 +60,7 @@ int main(int argc, char** argv)
                 numprimes ++;
             }
         }
-        MPI_Send(&numprimes, 1, MPI_DOUBLE, MPI_COMM_WORLD);        
+        MPI_Send(&numprimes, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);        
     }
     MPI_Finalize();
     return 0;
