@@ -29,6 +29,10 @@ int main(int argc, char** argv)
             { 
                 end=n;
             }
+            else
+            {
+                end = start + numele - 1;
+            }
 
             MPI_Send(&start, 1, MPI_INT ,  i, 0, MPI_COMM_WORLD);
             MPI_Send(&end, 1, MPI_INT ,  i, 0, MPI_COMM_WORLD);
@@ -43,7 +47,7 @@ int main(int argc, char** argv)
         MPI_Recv(&rankResult,1,MPI_DOUBLE,i,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
         result += rankResult;
     }
-    printf("Number of Primes: %d\n",numprimes);
+    printf("Number of Primes: %d\n", result);
 
     //Worker
     if(rank!=0)
