@@ -62,7 +62,7 @@ int main(int argc, char** argv)
         MPI_Recv(&end, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
         //Funtion Call -> calculation. 
-        for (i = 1; i <= n; i++)
+        for (i = start; i <= end; i++)
         {
             if (is_prime(i) == 1)
             {
