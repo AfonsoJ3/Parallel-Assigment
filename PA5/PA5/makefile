@@ -12,7 +12,7 @@ PBS_FILE = pbs_MPI
 all: $(PROG)
 
 $(PROG): $(OBJ)
-	$(LDA) $(OBJ) -o $(PROG)
+	$(LDA) $(OBJ) -o $(PROG) -lm
 
 %.o: %.c
 	$(FCC) -c $< 
