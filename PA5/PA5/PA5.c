@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <mpi.h>
 
 int is_prime(int n);
@@ -32,7 +33,7 @@ int main(int argc, char** argv)
             {
                 MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 MPI_Recv(&hasWork,1,MPI_C_BOOL, i,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-                print("Debug: No more work! Ending program!!!");
+                printf("Debug: No more work! Ending program!!!");
                 
             }
 
