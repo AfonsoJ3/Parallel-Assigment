@@ -13,37 +13,49 @@ int main(int argc, char** argv)
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
     int n=10000000;
     int numprimes = 0;
-    int i;
     int result = 0;
     int rankResult = 0;
+    int start, end, i;
 
     //Master 
     if (rank == 0)
     {
-        int numele=n/(numranks - 1);
-        int start, end;
+        int numele = 100000;
+        int killSignal = -1;
+        start = (i-1) * numele + 1; // first run it's one.
+        int nextStart;
+        bool hasWork = true;
 
         for(int i=1;i<numranks;i++)
         { 
-            start=(i-1)*numele+1;
-            end=start+numele-1;
-            if(rank==numranks-1) 
-            { 
-                end=n;
+            if (start > n)
+            {
+                MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Recv(&hasWork,1,MPI_C_BOOL, i,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+                print("Debug: No more work! Ending program!!!");
+                
             }
 
-            if (i == 1)
-            {
-                print("rank #%d has number from %d until %d\n", i, start, end);
-            }
             else 
             {
-                print("rank #%d has number from %d until %d\n", i, start, end);
+                while (hasWork)
+                {
+                
+                    if(rank == numranks-1) //last rank
+                    {       
+                        end=n;
+                    }
+
+                    nextStart = start;
+                    end = start + numele - 1;
+                    start = end + 1;
+
+                    MPI_Send(&nextStart, 1, MPI_INT ,  i, 0, MPI_COMM_WORLD);
+                    MPI_Send(&end, 1, MPI_INT ,  i, 0, MPI_COMM_WORLD);
+
+                    printf("Rank #%d has numbers from %d until %d\n", i, nextStart, end);
+                }
             }
-
-            MPI_Send(&start, 1, MPI_INT ,  i, 0, MPI_COMM_WORLD);
-            MPI_Send(&end, 1, MPI_INT ,  i, 0, MPI_COMM_WORLD);
-
         }
 
         for (int i=1; i<numranks; i++)
@@ -57,7 +69,16 @@ int main(int argc, char** argv)
     //Worker
     if(rank!=0)
     {
-        int start, end;
+        
+
+        int start, end, KillSignal;
+        MPI_Recv(&start, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        if (KillSignal == -1)
+        {
+           bool hasWork = false;
+           MPI_Send(&hasWork, 1, MPI_C_BOOL, 0, 0, MPI_COMM_WORLD);
+
+        }
         MPI_Recv(&start, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         MPI_Recv(&end, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
