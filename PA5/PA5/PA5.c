@@ -31,9 +31,14 @@ int main(int argc, char** argv)
             { 
                 end=n;
             }
-            else
+
+            if (i == 1)
             {
-                end = start + numele - 1;
+                print("rank #%d has number from %d until %d\n", i, start, end);
+            }
+            else 
+            {
+                print("rank #%d has number from %d until %d\n", i, start, end);
             }
 
             MPI_Send(&start, 1, MPI_INT ,  i, 0, MPI_COMM_WORLD);
@@ -46,11 +51,8 @@ int main(int argc, char** argv)
             MPI_Recv(&rankResult,1,MPI_INT,i,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
             result += rankResult;
         }
+        printf("Number of Primes: %d\n", result);
     }
-
-    
-    
-    printf("Number of Primes: %d\n", result);
 
     //Worker
     if(rank!=0)
