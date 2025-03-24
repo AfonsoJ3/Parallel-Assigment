@@ -14,6 +14,8 @@ int main(int argc, char** argv)
     int n=10000000;
     int numprimes = 0;
     int i;
+    int result = 0;
+    int rankResult = 0;
 
     //Master 
     if (rank == 0)
@@ -38,15 +40,16 @@ int main(int argc, char** argv)
             MPI_Send(&end, 1, MPI_INT ,  i, 0, MPI_COMM_WORLD);
 
         }
+
+        for (int i=1; i<numranks; i++)
+        {
+            MPI_Recv(&rankResult,1,MPI_INT,i,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+            result += rankResult;
+        }
     }
 
-    double result = 0;
-    double rankResult = 0;
-    for (int i=1; i<numranks; i++)
-    {
-        MPI_Recv(&rankResult,1,MPI_DOUBLE,i,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-        result += rankResult;
-    }
+    
+    
     printf("Number of Primes: %d\n", result);
 
     //Worker
@@ -64,7 +67,7 @@ int main(int argc, char** argv)
                 numprimes ++;
             }
         }
-        MPI_Send(&numprimes, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);        
+        MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);        
     }
     MPI_Finalize();
     return 0;
