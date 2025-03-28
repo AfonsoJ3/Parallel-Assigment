@@ -20,6 +20,12 @@ int main(int argc, char** argv)
     //Master 
     if (rank == 0)
     {
+        if (numranks < 3)
+        {
+            printf("WARNING: NUMRANKS MUST BE MORE OR EQUAL TO 3. CHANGE NODES AT PBS FILE. END PROGRAM.");
+            return 0;
+        }
+
         int numele= 1000; //the amount each rank will take
         int start, end, myStart, workers;
         start = (i-1) * numele + 1;
@@ -46,7 +52,7 @@ int main(int argc, char** argv)
                 if (workers > 0)
                 {
                     MPI_Recv(&rankResult,1,MPI_INT,i,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-                    printf("Debug: Reviced prime. Adding to final result.\n")
+                    printf("Debug: Reviced prime. Adding to final result.\n");
                     result += rankResult;
                 }
             }
