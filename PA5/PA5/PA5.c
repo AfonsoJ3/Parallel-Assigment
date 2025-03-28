@@ -20,36 +20,43 @@ int main(int argc, char** argv)
     //Master 
     if (rank == 0)
     {
-        int numele= n / (numranks - 1);
-        int start, end;
+        int numele= 1000; //the amount each rank will take
+        int start, end, myStart, workers;
+        start = (i-1) * numele + 1;
+        workers = numranks - 1;
 
         for(int i=1;i<numranks;i++)
-        { 
-            start=(i-1)*numele+1;
-            end=start+numele-1;
-            if(rank==numranks-1) 
-            { 
-                end=n;
-            }
-
-            if (i == 1)
+        {             
+            if (start <= n) // check if start did not passed the upper limit
             {
-                print("rank #%d has number from %d until %d\n", i, start, end);
+                //myStart = start; // holds the start position
+                end = start + numele - 1; // holds the last numnber of the range. example -> start = 0 end = 999. start = 1000 end = 1999. 
+                if(end > n)
+                {
+                    end = n;
+                }
+                //start = end + 1; //gets the new start of the chuck.
+                MPI_Send(&start, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&end, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                printf("Debug: Send start and end to rank %d\n", i);
+                
+                start = end + 1; //gets the new start of the chuck.
+                printf("Debug: start updated. From %d to %d.\n", start - end, start);
+
+                if (workers > 0)
+                {
+                    MPI_Recv(&rankResult,1,MPI_INT,i,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+                    printf("Debug: Reviced prime. Adding to final result.\n")
+                    result += rankResult;
+                }
             }
-            else 
+            else //if passed send a kill signal 
             {
-                print("rank #%d has number from %d until %d\n", i, start, end);
+                int killSignal = -1;
+                MPI_Send( &killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                workers --;
             }
 
-            MPI_Send(&start, 1, MPI_INT ,  i, 0, MPI_COMM_WORLD);
-            MPI_Send(&end, 1, MPI_INT ,  i, 0, MPI_COMM_WORLD);
-
-        }
-
-        for (int i=1; i<numranks; i++)
-        {
-            MPI_Recv(&rankResult,1,MPI_INT,i,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-            result += rankResult;
         }
         printf("Number of Primes: %d\n", result);
     }
@@ -60,16 +67,18 @@ int main(int argc, char** argv)
         int start, end;
         MPI_Recv(&start, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         MPI_Recv(&end, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        int prime = end + start;
 
-        //Funtion Call -> calculation. 
-        for (i = start; i <= end; i++)
-        {
-            if (is_prime(i) == 1)
-            {
-                numprimes ++;
-            }
-        }
-        MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);        
+        // //Funtion Call -> calculation. 
+        // for (i = start; i <= end; i++)
+        // {
+        //     if (is_prime(i) == 1)
+        //     {
+        //         numprimes ++;
+        //     }
+        // }
+        printf("Debug: Recived start %d and end %d.\n", start, end);
+        MPI_Send(&prime, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);        
     }
     MPI_Finalize();
     return 0;
