@@ -40,14 +40,14 @@ int main(int argc, char** argv)
 
                 MPI_Send(&start, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 MPI_Send(&end, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                printf("Debug: Sent range from %d to %d to rank %d\n", start, end, i);
+                //printf("Debug: Sent range from %d to %d to rank %d\n", start, end, i);
                 
                 start = end + 1; // gets the new start of the chunk
-                printf("Debug: Start updated to %d.\n", start);
+                //printf("Debug: Start updated to %d.\n", start);
 
                 // Receive result from worker
                 MPI_Recv(&rankResult, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                printf("Debug: Received prime count from rank %d.\n", i);
+                //printf("Debug: Received prime count from rank %d.\n", i);
                 result += rankResult;
             }
             else // if passed, send a kill signal 
@@ -77,10 +77,10 @@ int main(int argc, char** argv)
 
                     MPI_Send(&start, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                     MPI_Send(&end, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                    printf("Debug: Sent range from %d to %d to rank %d\n", start, end, i);
+                    //printf("Debug: Sent range from %d to %d to rank %d\n", start, end, i);
                     
                     start = end + 1; // gets the new start of the chunk
-                    printf("Debug: Start updated to %d.\n", start);
+                    //printf("Debug: Start updated to %d.\n", start);
                 }
                 else // if passed, send a kill signal 
                 {
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
             }
         }
 
-        printf("Debug: Received range from %d to %d.\n", start, end);
+        //printf("Debug: Received range from %d to %d.\n", start, end);
         MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);        
     }
 
