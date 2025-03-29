@@ -41,7 +41,7 @@ int main(int argc, char** argv)
                 {
                     end = n;
                 }
-                //start = end + 1; //gets the new start of the chuck.
+
                 MPI_Send(&start, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 MPI_Send(&end, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 printf("Debug: Send start and end to rank %d\n", i);
@@ -62,7 +62,45 @@ int main(int argc, char** argv)
                 MPI_Send( &killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 workers --;
             }
+        }
 
+        while(workers > 0)
+        {
+            for(int i=1;i<numranks;i++)
+            {   
+                MPI_Recv(&rankResult, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                result += rankResult;
+                if (start <= n) // check if start did not passed the upper limit
+                {
+                    //myStart = start; // holds the start position
+                    end = start + numele - 1; // holds the last numnber of the range. example -> start = 0 end = 999. start = 1000 end = 1999. 
+                    
+                    if(end > n)
+                    {
+                        end = n;
+                    }
+
+                    MPI_Send(&start, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                    MPI_Send(&end, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                    printf("Debug: Send start and end to rank %d\n", i);
+                    
+                    start = end + 1; //gets the new start of the chuck.
+                    printf("Debug: start updated. From %d to %d.\n", start - end, start);
+
+                    if (workers > 0)
+                    {
+                        MPI_Recv(&rankResult,1,MPI_INT,i,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+                        printf("Debug: Reviced prime. Adding to final result.\n");
+                        result += rankResult;
+                    }
+                }
+                else //if passed send a kill signal 
+                {
+                    int killSignal = -1;
+                    MPI_Send( &killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                    workers --;
+                }
+            }
         }
         printf("Number of Primes: %d\n", result);
     }
