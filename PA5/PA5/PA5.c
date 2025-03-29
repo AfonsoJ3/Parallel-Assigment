@@ -85,7 +85,7 @@ int main(int argc, char** argv)
                 else // if passed, send a kill signal 
                 {
                     int killSignal = -1;
-                    
+
                     MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                     killCount++; // Increment the kill signal count
                 }
@@ -103,6 +103,7 @@ int main(int argc, char** argv)
         MPI_Recv(&start, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         MPI_Recv(&end, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
+        numprimes = 0;
         // Function call -> calculation
         for (int i = start; i <= end; i++)
         {
