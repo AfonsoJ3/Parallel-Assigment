@@ -11,110 +11,96 @@ int main(int argc, char** argv)
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &numranks);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    int n = 10000000;
-    int numprimes = 0;
-    int result = 0;
-    int rankResult = 0;
 
-    // Master
+    int n = 10000000;  // Upper limit for prime checking
+    int numprimes = 0; // Worker prime count
+    int result = 0;    // Master final count
+    int rankResult = 0;
+    MPI_Status status;
+
+    // Master Process
     if (rank == 0)
     {
         if (numranks < 3)
         {
-            printf("WARNING: NUMRANKS MUST BE MORE OR EQUAL TO 3. CHANGE NODES AT PBS FILE. END PROGRAM.\n");
+            printf("WARNING: NUMRANKS MUST BE 3 OR MORE. INCREASE NODES IN PBS FILE. TERMINATING PROGRAM.\n");
+            MPI_Finalize();
             return 0;
         }
 
-        int numele = 1000; // the amount each rank will take
-        int start = 1, end, workers = numranks - 1;
+        int numele = 10000; // Larger batch size for efficiency
+        int start = 1, end;
+        int activeWorkers = numranks - 1;
 
+        // Assign initial work to each worker
         for (int i = 1; i < numranks; i++)
-        {             
-            if (start <= n) // check if start did not pass the upper limit
+        {
+            if (start <= n)
             {
-                end = start + numele - 1; // holds the last number of the range
-                if (end > n)
-                {
-                    end = n;
-                }
+                end = start + numele - 1;
+                if (end > n) end = n;
 
                 MPI_Send(&start, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 MPI_Send(&end, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                //printf("Debug: Sent range from %d to %d to rank %d\n", start, end, i);
-                
-                start = end + 1; // gets the new start of the chunk
-                //printf("Debug: Start updated to %d.\n", start);
-
-                // Receive result from worker
-                MPI_Recv(&rankResult, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                //printf("Debug: Received prime count from rank %d.\n", i);
-                result += rankResult;
+                start = end + 1;
             }
-            else // if passed, send a kill signal 
+            else
             {
                 int killSignal = -1;
                 MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                workers--;
+                activeWorkers--;
             }
         }
 
-        while (workers > 0)
+        // Receive results and dynamically assign new tasks
+        while (activeWorkers > 0)
         {
-            int killCount = 0;
-            
-            for (int i = 1; i < numranks; i++)
-            {   
-                MPI_Recv(&rankResult, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                result += rankResult;
+            MPI_Recv(&rankResult, 1, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
+            result += rankResult;
+            int worker = status.MPI_SOURCE;
 
-                if (start <= n) // check if start did not pass the upper limit
-                {
-                    end = start + numele - 1;
-                    if (end > n)
-                    {
-                        end = n;
-                    }
+            if (start <= n)
+            {
+                end = start + numele - 1;
+                if (end > n) end = n;
 
-                    MPI_Send(&start, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                    MPI_Send(&end, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                    //printf("Debug: Sent range from %d to %d to rank %d\n", start, end, i);
-                    
-                    start = end + 1; // gets the new start of the chunk
-                    //printf("Debug: Start updated to %d.\n", start);
-                }
-                else // if passed, send a kill signal 
-                {
-                    int killSignal = -1;
-
-                    MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                    killCount++; // Increment the kill signal count
-                }
+                MPI_Send(&start, 1, MPI_INT, worker, 0, MPI_COMM_WORLD);
+                MPI_Send(&end, 1, MPI_INT, worker, 0, MPI_COMM_WORLD);
+                start = end + 1;
             }
-
-            workers -= killCount; // Update worker count after receiving kill signals
+            else
+            {
+                int killSignal = -1;
+                MPI_Send(&killSignal, 1, MPI_INT, worker, 0, MPI_COMM_WORLD);
+                activeWorkers--;
+            }
         }
+
         printf("Number of Primes: %d\n", result);
     }
 
-    // Worker
+    // Worker Processes
     if (rank != 0)
     {
         int start, end;
-        MPI_Recv(&start, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        MPI_Recv(&end, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        numprimes = 0;
-        // Function call -> calculation
-        for (int i = start; i <= end; i++)
+        while (1)
         {
-            if (is_prime(i) == 1)
-            {
-                numprimes++;
-            }
-        }
+            MPI_Recv(&start, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            if (start == -1) break; // Termination condition
 
-        //printf("Debug: Received range from %d to %d.\n", start, end);
-        MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);        
+            MPI_Recv(&end, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            
+            numprimes = 0; // Reset count for each batch
+            for (int i = start; i <= end; i++)
+            {
+                if (is_prime(i) == 1)
+                {
+                    numprimes++;
+                }
+            }
+
+            MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        }
     }
 
     MPI_Finalize();
