@@ -85,19 +85,28 @@ int main(int argc, char** argv)
         int start, end;
         while (1)
         {
+            int Tstart, Tend;
+
             MPI_Recv(&start, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             if (start == -1) break; // Termination condition
 
             MPI_Recv(&end, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             
             numprimes = 0; // Reset count for each batch
+
+            Tstart = MPI_Wtime();
             for (int i = start; i <= end; i++)
             {
+                
                 if (is_prime(i) == 1)
                 {
                     numprimes++;
                 }
+                
             }
+            Tend = MPI_Wtime();
+
+            printf("\nRank: %d #%d-#%d. Time %d\n", rank, start, end, Tend - Tstart);
             MPI_Send(&rank, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
             MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
             
