@@ -12,7 +12,7 @@ int main(int argc, char** argv)
     MPI_Comm_size(MPI_COMM_WORLD, &numranks);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    int n = 10000000;  // Upper limit for prime checking
+    int n = 300000000;  // Upper limit for prime checking
     int numprimes = 0; // Worker prime count
     int result = 0;    // Master final count
     int rankResult = 0;
