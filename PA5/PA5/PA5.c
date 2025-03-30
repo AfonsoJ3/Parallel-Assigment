@@ -16,7 +16,7 @@ int main(int argc, char** argv)
     int numprimes = 0; // Worker prime count
     int result = 0;    // Master final count
     int rankResult = 0;
-    MPI_Status status;
+    int readyWorker;
 
     // Master Process
     if (rank == 0)
@@ -25,12 +25,12 @@ int main(int argc, char** argv)
         {
             printf("WARNING: NUMRANKS MUST BE 3 OR MORE. INCREASE NODES IN PBS FILE. TERMINATING PROGRAM.\n");
             MPI_Finalize();
-            return 0;
+            exit(0);
         }
 
         int numele = 10000; // Larger batch size for efficiency
         int start = 1, end;
-        int activeWorkers = numranks - 1;
+        int workers = numranks - 1;
 
         // Assign initial work to each worker
         for (int i = 1; i < numranks; i++)
@@ -48,31 +48,31 @@ int main(int argc, char** argv)
             {
                 int killSignal = -1;
                 MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                activeWorkers--;
+                workers--;
             }
         }
 
         // Receive results and dynamically assign new tasks
-        while (activeWorkers > 0)
+        while (workers > 0)
         {
-            MPI_Recv(&rankResult, 1, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
+            MPI_Recv(&readyWorker , 1, MPI_INT, MPI_ANY_SOURCE, 1,  MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&rankResult, 1, MPI_INT, readyWorker, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             result += rankResult;
-            int worker = status.MPI_SOURCE;
 
             if (start <= n)
             {
                 end = start + numele - 1;
                 if (end > n) end = n;
 
-                MPI_Send(&start, 1, MPI_INT, worker, 0, MPI_COMM_WORLD);
-                MPI_Send(&end, 1, MPI_INT, worker, 0, MPI_COMM_WORLD);
+                MPI_Send(&start, 1, MPI_INT, readyWorker, 0, MPI_COMM_WORLD);
+                MPI_Send(&end, 1, MPI_INT, readyWorker, 0, MPI_COMM_WORLD);
                 start = end + 1;
             }
             else
             {
                 int killSignal = -1;
-                MPI_Send(&killSignal, 1, MPI_INT, worker, 0, MPI_COMM_WORLD);
-                activeWorkers--;
+                MPI_Send(&killSignal, 1, MPI_INT, readyWorker, 0, MPI_COMM_WORLD);
+                workers--;
             }
         }
 
@@ -98,8 +98,9 @@ int main(int argc, char** argv)
                     numprimes++;
                 }
             }
-
+            MPI_Send(&rank, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
             MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+            
         }
     }
 
