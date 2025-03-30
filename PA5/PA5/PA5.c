@@ -83,9 +83,9 @@ int main(int argc, char** argv)
     if (rank != 0)
     {
         int start, end;
-        while (1)
+        double Tstart, Tend;
+	while (1)
         {
-            int Tstart, Tend;
 
             MPI_Recv(&start, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             if (start == -1) break; // Termination condition
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
                 exit(1);
             }
 
-            fprintf(fp, "Rank: %d processed #%d-#%d. Time %lf\n", rank, start, end, Tend - Tstart);
+            fprintf(fp, "Rank: %d processed #%d-#%d. Time %.6f\n", rank, start, end, Tend - Tstart);
             fclose(fp);
 
             //printf("\nRank: %d #%d-#%d. Time %d\n", rank, start, end, Tend - Tstart);
