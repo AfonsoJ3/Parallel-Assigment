@@ -106,14 +106,8 @@ int main(int argc, char** argv)
                 
             }
             Tend = MPI_Wtime();
-            for (int i = 1; i < numranks; i++)
-            {
-                if (rank == i)
-                {
-                    printf("Recived. rank %d have start: %d - end: %d.\n", rank, start, end);
-                }
-
-            }
+            
+            printf("Recived. rank %d have start: %d - end: %d.\n", rank, start, end);
 
             // FILE *fp = fopen("worker_output.txt", "a");  // Open file in append mode
            
