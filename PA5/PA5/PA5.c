@@ -59,7 +59,7 @@ int main(int argc, char** argv)
         {
             MPI_Recv(&readyWorker , 1, MPI_INT, MPI_ANY_SOURCE, 1,  MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             MPI_Recv(&rankResult, 1, MPI_INT, readyWorker, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv(&time, 1, MPIO_DOUBLE, readyWorker, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&time, 1, MPI_DOUBLE, readyWorker, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             result += rankResult;
             totalTime += time;
 
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
         }
         avgTime = totalTime / numranks; 
 
-        printf("Ranks: %d\n# Primes: %d\nTime: %d\n", numranks,result, avgTime);
+        printf("Ranks: %d\n# Primes: %d\nTime: %.6f", numranks,result, avgTime);
     }
 
     // Worker Processes
