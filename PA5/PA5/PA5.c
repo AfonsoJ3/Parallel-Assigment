@@ -12,7 +12,7 @@ int main(int argc, char** argv)
     MPI_Comm_size(MPI_COMM_WORLD, &numranks);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    int n = 1000;  // Upper limit for prime checking
+    int n = 100000;  // Upper limit for prime checking
     int numprimes = 0; // Worker prime count
     int result = 0;    // Master final count
     int rankResult = 0;
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
         }
         avgTime = totalTime / numranks; 
 
-        printf("Ranks: %d - Partition: - # Primes: %d - Time: %.6f\n", numranks,result, avgTime);
+        printf("Number: %d - Ranks: %d - Partition: %d - # Primes: %d - Time: %.6f\n", n, numranks, numele, result, avgTime);
     }
 
     // Worker Processes
