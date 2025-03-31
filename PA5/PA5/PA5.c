@@ -42,7 +42,8 @@ int main(int argc, char** argv)
 
                 MPI_Send(&start, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 MPI_Send(&end, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                start = end + 1;
+              	printf("Start: %d - End: %d - Rank: %d.\n", start, end, i);
+		start = end + 1;
             }
             else
             {
@@ -106,15 +107,15 @@ int main(int argc, char** argv)
             }
             Tend = MPI_Wtime();
 
-            FILE *fp = fopen("worker_output.txt", "a");  // Open file in append mode
-            if (fp == NULL) {
-                printf("Error opening file!\n");
-                MPI_Finalize();
-                exit(1);
-            }
+//            FILE *fp = fopen("worker_output.txt", "a");  // Open file in append mode
+  //          if (fp == NULL) {
+    //            printf("Error opening file!\n");
+      //          MPI_Finalize();
+        //        exit(1);
+          //  }
 
-            fprintf(fp, "Rank: %d processed #%d-#%d. Time %.6f\n", rank, start, end, Tend - Tstart);
-            fclose(fp);
+           // fprintf(fp, "Rank: %d processed #%d-#%d. Time %.6f\n", rank, start, end, Tend - Tstart);
+            //fclose(fp);
 
             //printf("\nRank: %d #%d-#%d. Time %d\n", rank, start, end, Tend - Tstart);
             MPI_Send(&rank, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
