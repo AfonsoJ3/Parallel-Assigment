@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 
                 MPI_Send(&start, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 MPI_Send(&end, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-              	printf("Start: %d - End: %d - Rank: %d.\n", start, end, i);
+              	//printf("Start: %d - End: %d - Rank: %d.\n", start, end, i);
 		        start = end + 1;
             }
             else
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
     {
         int start, end;
         double Tstart, Tend;
-	while (1)
+        while (1)
         {
 
             MPI_Recv(&start, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -106,21 +106,31 @@ int main(int argc, char** argv)
                 
             }
             Tend = MPI_Wtime();
+            for (int i = 1; i < numranks; i++)
+            {
+                if (rank == i)
+                {
+                    printf("Recived. rank %d have start: %d - end: %d.\n", rank, start, end);
+                }
 
-           FILE *fp = fopen("worker_output.txt", "a");  // Open file in append mode
-           if (fp == NULL) {
-               printf("Error opening file!\n");
-               MPI_Finalize();
-               exit(1);
-           }
+            }
 
-           fprintf(fp, "Rank: %d processed #%d-#%d. Time %.6f\n", rank, start, end, Tend - Tstart);
-            fclose(fp);
+            // FILE *fp = fopen("worker_output.txt", "a");  // Open file in append mode
+           
+            // if (fp == NULL) 
+            // {
+            //     printf("Error opening file!\n");
+            //     MPI_Finalize();
+            //     exit(1);
+            // }
 
-            printf("\nRank: %d #%d-#%d. Time %d\n", rank, start, end, Tend - Tstart);
-            MPI_Send(&rank, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
-            MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-            
+            // fprintf(fp, "Rank: %d processed #%d-#%d. Time %.6f\n", rank, start, end, Tend - Tstart);
+            // fclose(fp);
+
+            // printf("\nRank: %d #%d-#%d. Time %d\n", rank, start, end, Tend - Tstart);
+            // MPI_Send(&rank, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
+            // MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+                
         }
     }
 
