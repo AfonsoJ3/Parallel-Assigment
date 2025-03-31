@@ -21,6 +21,7 @@ int main(int argc, char** argv)
     // Master Process
     if (rank == 0)
     {
+        double time, avgTime, totalTime;
         if (numranks < 3)
         {
             printf("WARNING: NUMRANKS MUST BE 3 OR MORE. INCREASE NODES IN PBS FILE. TERMINATING PROGRAM.\n");
@@ -58,7 +59,9 @@ int main(int argc, char** argv)
         {
             MPI_Recv(&readyWorker , 1, MPI_INT, MPI_ANY_SOURCE, 1,  MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             MPI_Recv(&rankResult, 1, MPI_INT, readyWorker, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&time, 1, MPIO_DOUBLE, readyWorker, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             result += rankResult;
+            totalTime += time;
 
             if (start <= n)
             {
@@ -76,8 +79,9 @@ int main(int argc, char** argv)
                 workers--;
             }
         }
+        avgTime = totalTime / numranks; 
 
-        printf("Number of Primes: %d\n", result);
+        printf("Ranks: %d\n# Primes: %d\nTime: %d\n", numranks,result, avgTime);
     }
 
     // Worker Processes
@@ -85,6 +89,7 @@ int main(int argc, char** argv)
     {
         int start, end;
         double Tstart, Tend;
+        double workerTime;
         while (1)
         {
 
@@ -106,25 +111,13 @@ int main(int argc, char** argv)
                 
             }
             Tend = MPI_Wtime();
-            
-            printf("Recived. rank %d have start: %d - end: %d.\n", rank, start, end);
 
-            // FILE *fp = fopen("worker_output.txt", "a");  // Open file in append mode
+            workerTime = Tend - Tstart;
+
+            MPI_Send(&rank, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
+            MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+            MPI_Send(&workerTime, 1, MPI_DOUBLE,  0, 0, MPI_COMM_WORLD);
            
-            // if (fp == NULL) 
-            // {
-            //     printf("Error opening file!\n");
-            //     MPI_Finalize();
-            //     exit(1);
-            // }
-
-            // fprintf(fp, "Rank: %d processed #%d-#%d. Time %.6f\n", rank, start, end, Tend - Tstart);
-            // fclose(fp);
-
-            // printf("\nRank: %d #%d-#%d. Time %d\n", rank, start, end, Tend - Tstart);
-            // MPI_Send(&rank, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
-            // MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-                
         }
     }
 
