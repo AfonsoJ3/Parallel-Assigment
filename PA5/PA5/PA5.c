@@ -81,7 +81,7 @@ int main(int argc, char** argv)
         }
         avgTime = totalTime / numranks; 
 
-        printf("Ranks: %d\n# Primes: %d\nTime: %.6f", numranks,result, avgTime);
+        printf("Ranks: %d - Partition: - # Primes: %d - Time: %.6f\n", numranks,result, avgTime);
     }
 
     // Worker Processes
