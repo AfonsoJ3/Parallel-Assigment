@@ -1,0 +1,44 @@
+Height: 3000
+Width : 4000
+[torbjorn:04270] *** Process received signal ***
+[torbjorn:04270] Signal: Segmentation fault (11)
+[torbjorn:04270] Signal code: Address not mapped (1)
+[torbjorn:04270] Failing at address: (nil)
+[torbjorn:04270] [ 0] /lib/x86_64-linux-gnu/libc.so.6(+0x354b0)[0x7f4157f364b0]
+[torbjorn:04270] [ 1] /lib/x86_64-linux-gnu/libc.so.6(+0x9f849)[0x7f4157fa0849]
+[torbjorn:04270] [ 2] /opt/openmpi/lib/openmpi/mca_btl_tcp.so(mca_btl_tcp_frag_recv+0x9b)[0x7f41361ae00b]
+[torbjorn:04270] [ 3] /opt/openmpi/lib/openmpi/mca_btl_tcp.so(+0x8bd9)[0x7f41361acbd9]
+[torbjorn:04270] [ 4] /opt/openmpi/lib/libopen-pal.so.40(opal_libevent2022_event_base_loop+0x7f3)[0x7f41526fce83]
+[torbjorn:04270] [ 5] /opt/openmpi/lib/libopen-pal.so.40(opal_progress+0x111)[0x7f41526b7501]
+[torbjorn:04270] [ 6] /opt/openmpi/lib/libmpi.so.40(ompi_request_default_wait+0x125)[0x7f415852b515]
+[torbjorn:04270] [ 7] /opt/openmpi/lib/libmpi.so.40(ompi_coll_base_bcast_intra_generic+0x56d)[0x7f415857f66d]
+[torbjorn:04270] [ 8] /opt/openmpi/lib/libmpi.so.40(ompi_coll_base_bcast_intra_pipeline+0xb7)[0x7f415857f8e7]
+[torbjorn:04270] [ 9] /opt/openmpi/lib/openmpi/mca_coll_tuned.so(ompi_coll_tuned_bcast_intra_dec_fixed+0x13e)[0x7f413533279e]
+[torbjorn:04270] [10] /opt/openmpi/lib/libmpi.so.40(MPI_Bcast+0x1a9)[0x7f4158543699]
+[torbjorn:04270] [11] ./PA4.x[0x4025a0]
+[torbjorn:04270] [12] /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0)[0x7f4157f21830]
+[torbjorn:04270] [13] ./PA4.x[0x401499]
+[torbjorn:04270] *** End of error message ***
+--------------------------------------------------------------------------
+An MPI communication peer process has unexpectedly disconnected.  This
+usually indicates a failure in the peer process (e.g., a crash or
+otherwise exiting without calling MPI_FINALIZE first).
+
+Although this local MPI process will likely now behave unpredictably
+(it may even hang or crash), the root cause of this problem is the
+failure of the peer -- that is what you need to investigate.  For
+example, there may be a core file that you can examine.  More
+generally: such peer hangups are frequently caused by application bugs
+or other external events.
+
+  Local host: junkrat
+  Local PID:  22813
+  Peer host:  torbjorn
+--------------------------------------------------------------------------
+-------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+-------------------------------------------------------
+--------------------------------------------------------------------------
+mpiexec noticed that process rank 1 with PID 4270 on node torbjorn exited on signal 11 (Segmentation fault).
+--------------------------------------------------------------------------

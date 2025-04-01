@@ -1,0 +1,16 @@
+Height: 8000
+Width : 12000
+
+The Bcast with 8 ranks, took 3.0142307201 seconds
+The calculation with 8 ranks, took 101.8877303211 seconds
+The gather with 8 ranks, took 1.1981463989 seconds
+--------------------------------------------------------------------------
+Your job has requested more processes than the ppr for
+this topology can support:
+
+  App: ./PA4.x
+  Number of procs:  12
+  PPR: 1:node
+
+Please revise the conflict and try again.
+--------------------------------------------------------------------------
