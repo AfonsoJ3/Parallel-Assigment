@@ -12,7 +12,7 @@ int main(int argc, char** argv)
     MPI_Comm_size(MPI_COMM_WORLD, &numranks);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    int n = 1000000000;  // Upper limit for prime checking
+    int n = 300000000;  // Upper limit for prime checking
     int numprimes = 0; // Worker prime count
     int result = 0;    // Master final count
     int rankResult = 0;
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
             exit(0);
         }
 
-        int numele = 1; // Larger batch size for efficiency
+        int numele = 10; // Larger batch size for efficiency
         int start = 1, end;
         int workers = numranks - 1;
 
@@ -80,16 +80,16 @@ int main(int argc, char** argv)
             }
         }
         avgTime = totalTime / numranks; 
-        FILE *fp = fopen("worker_output.txt", "a");
+       // FILE *fp = fopen("worker_output.txt", "a");
         
-        if (fp == NULL) 
-        {
-            printf("Error opening file!\n");
-            MPI_Finalize();
-            exit(1);
-        }
-        fprintf(fp,"Number: %d - Ranks: %d - Partition: %d - # Primes: %d - Time: %.6f\n", n, numranks, numele, result, avgTime);
-        fclose(fp);
+       // if (fp == NULL) 
+       // {
+        //    printf("Error opening file!\n");
+        //    MPI_Finalize();
+       //     exit(1);
+       // }
+        printf("Number: %d - Ranks: %d - Partition: %d - # Primes: %d - Time: %.6f\n", n, numranks, numele, result, avgTime);
+        //fclose(fp);
     }
 
     // Worker Processes
