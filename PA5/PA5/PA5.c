@@ -80,16 +80,7 @@ int main(int argc, char** argv)
             }
         }
         avgTime = totalTime / numranks; 
-       // FILE *fp = fopen("worker_output.txt", "a");
-        
-       // if (fp == NULL) 
-       // {
-        //    printf("Error opening file!\n");
-        //    MPI_Finalize();
-       //     exit(1);
-       // }
-        printf("Number: %d - Ranks: %d - Partition: %d - # Primes: %d - Time: %.6f\n", n, numranks, numele, result, avgTime);
-        //fclose(fp);
+        //printf("Number: %d - Ranks: %d - Partition: %d - # Primes: %d - Time: %.6f\n", n, numranks, numele, result, avgTime);
     }
 
     // Worker Processes
@@ -121,10 +112,30 @@ int main(int argc, char** argv)
             Tend = MPI_Wtime();
 
             workerTime = Tend - Tstart;
+            
+            if (start == 80001 && end == 90000)
+            {
+                printf("Ranks: %d  - calc Time: %.6f\n", n, numranks, workerTime);
+            }
+            else if (start == 90001 && end == 100000)
+            {
+                printf("Ranks: %d  - calc Time: %.6f\n", n, numranks, workerTime);
+
+            }
+            else if (start == 100001 && end == 110000)
+            {
+                printf("Ranks: %d  - calc Time: %.6f\n", n, numranks, workerTime);
+
+            }
+            else if (start == 110001 && end == 120000)
+            {
+                printf("Ranks: %d  - calc Time: %.6f\n", n, numranks, workerTime);
+
+            }
 
             MPI_Send(&rank, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
             MPI_Send(&numprimes, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-            MPI_Send(&workerTime, 1, MPI_DOUBLE,  0, 0, MPI_COMM_WORLD);
+            //MPI_Send(&workerTime, 1, MPI_DOUBLE,  0, 0, MPI_COMM_WORLD);
            
         }
     }
