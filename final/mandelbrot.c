@@ -73,7 +73,16 @@ int main( int argc, char** argv )
         #pragma omp for nowait schedule(dynamic)
         for(int i = myStart; i < myEnd; i++)
         {
-            printf("The code got to here.");
+            if (i == 0)
+            {
+                printf("The code got to here.\n");
+            }
+            
+            if (i == nx)
+            {
+                printf("The code got to here.\n");
+            }
+
             for(int j = 0; j < nx; j++)
             {
                 //chosen a value for C
@@ -94,18 +103,28 @@ int main( int argc, char** argv )
                 }
                 worker_matrix[i * nx + j] = iter;
             }
+            if (i == 0)
+            {
+                printf("worker matrix got assing.\n");
+            }
+            
+            if (i == nx)
+            {
+                printf("worker matrix got assing.\n");
+            }
+
         }
     }
 
     if (rank != 0)
     {
         MPI_Send(worker_matrix, nx * ny, MPI_INT, 0, 0, MPI_COMM_WORLD);
-        printf("worker matrix send.");
+        printf("worker matrix send.\n");
     }
     else
     {
         MPI_Recv(&master_Matrix, nx * ny, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("matrix recived.");
+        printf("matrix recived.\n");
         
         //save image
         int dims[2]={ny,nx};
