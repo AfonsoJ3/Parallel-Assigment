@@ -7,17 +7,6 @@ extern void matToImage(char* name, int* mat, int* dims);
 int main( int argc, char** argv ) 
 {
     //setup mandelbrot data
-    
-    
-    
-    //C=x0+iy0
-    double x0=0;
-    double y0=0;
-    //Z=x+iy
-    double x=0;
-    double y=0;
-
-    int iter=0;
     int rank, numRank;
 
     MPI_Init( &argc , &argv);
@@ -33,6 +22,14 @@ int main( int argc, char** argv )
     double yEnd=1;
     int maxIter=255;
     int* matrix = NULL;
+    //C=x0+iy0
+    double x0=0;
+    double y0=0;
+    //Z=x+iy
+    double x=0;
+    double y=0;
+
+    int iter=0;
     
     int startRow, endRow ;
     int numele = ny / (numRank - 1);
@@ -64,7 +61,7 @@ int main( int argc, char** argv )
         MPI_Recv( &endRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD,  MPI_STATUS_IGNORE);
     }
 
-    int matrix2 = (int*) malloc (nx*(startRow - endRow)*sizeof(int)); 
+    int* matrix2 = (int*) malloc (nx*(startRow - endRow)*sizeof(int)); 
 
     #pragma omp parallel for schedule(dynamic) collapse(2)
    {
@@ -72,15 +69,18 @@ int main( int argc, char** argv )
         //use the same method as in PA5.x
 
         //create mandelbrot here
-        for(int i=startRow;i<endRow;i++){
-            for(int j=0;j<nx;j++){
+        for(int i=startRow;i<endRow;i++)
+        {
+            for(int j=0;j<nx;j++)
+            {
                 //chosen a value for C
                 x0=xStart+(1.0*j/nx)*(xEnd-xStart);
                 y0=yStart+(1.0*i/ny)*(yEnd-yStart);
                 x=0; y=0; //set Z to 0
                 iter=0;
 
-                while(iter<maxIter){
+                while(iter<maxIter)
+                {
                     iter++;
                     double temp=x*x-y*y+x0;
                     y=2*x*y+y0;
@@ -107,10 +107,10 @@ int main( int argc, char** argv )
             {
                 endingRow= ny;
             }
-            MPI_Recv( matrix + startRow * nx ,   nx*(startRow - endRow), MPI_INT , i,  0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv( matrix + startRow * nx , nx*(startRow - endRow), MPI_INT , i,  0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
 
-        for (int i = 0; i < end_row; i++) 
+        for (int i = 0; i < endRow; i++) 
         {
             for (int j = 0; j < nx; j++) 
             {
@@ -119,7 +119,7 @@ int main( int argc, char** argv )
         }
 
         int dims[2] = {ny, nx};
-        matToImage("mandelbrot.jpg", full_matrix, dims);
+        matToImage("mandelbrot.jpg", matrix, dims);
         free(matrix);
    }
 
