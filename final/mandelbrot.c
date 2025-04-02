@@ -93,7 +93,7 @@ int main( int argc, char** argv )
         }
     }
 
-    if (rank == )
+    if (rank == 1)
     {
         free(master_Matrix);
     }
