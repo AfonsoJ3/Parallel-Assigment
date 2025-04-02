@@ -15,7 +15,7 @@ int main( int argc, char** argv )
     //setup mandelbrot data
     int nx=900;
     int ny=600;
-    int* worker_matrix = (int*) malloc ( nx * ny * sizeof(int));
+    int* worker_matrix = NULL;
     double xStart=-2;
     double xEnd=1;
     double yStart=-1;
@@ -57,6 +57,7 @@ int main( int argc, char** argv )
     }
     else
     {
+        worker_matrix = (int*) malloc ( (WmyEnd - WmyStart) * ny * sizeof(int));
         MPI_Recv( &WmyStart, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         MPI_Recv( &WmyEnd, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
@@ -87,7 +88,7 @@ int main( int argc, char** argv )
                         if (x * x + y * y > 4) 
                             break;
                     }
-                    worker_matrix[i * nx + j] = iter;
+                    worker_matrix[(i - WmyStart) * nx + j] = iter;
                 }
             }
         }
@@ -101,9 +102,11 @@ int main( int argc, char** argv )
     }
     else
     {
-        MPI_Recv(master_Matrix, nx * ny, MPI_INT, 0, MPI_ANY_SOURCE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("\nmatrix recived.\n");
-        
+       for (int i = 0; i < numRank; i++)
+       {
+        MPI_Recv(master_Matrix, nx * ny, MPI_INT, 0, i, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+       }
+       printf("\nmatrix recived.\n");
         //save image
         int dims[2]={ny,nx};
         matToImage("mandelbrot.jpg",master_Matrix,dims);
