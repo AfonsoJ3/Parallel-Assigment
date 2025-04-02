@@ -44,7 +44,7 @@ int main( int argc, char** argv )
        for (int i = 1; i < numRank - 1 ; i++)
        {
             int startingRow =  i * numele;
-            int endingRow = startingRow + i * numele;
+            int endingRow = startingRow + numele;
 
             if (i == numRank - 1)
             {
@@ -104,7 +104,7 @@ int main( int argc, char** argv )
             {
                 endingRow= ny;
             }
-            MPI_Recv( matrix + startRow * nx , nx*(endingRow - startingRow), MPI_INT , i,  0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv( matrix + startingRow * nx , nx*(endingRow - startingRow), MPI_INT , i,  0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
 
         for (int i = 0; i < endRow; i++) 
