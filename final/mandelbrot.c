@@ -105,12 +105,12 @@ int main( int argc, char** argv )
             }
             if (i == 0)
             {
-                printf("worker matrix got assing.\n");
+                printf("1- worker matrix got assing.\n");
             }
             
             if (i == nx)
             {
-                printf("worker matrix got assing.\n");
+                printf("900- worker matrix got assing.\n");
             }
 
         }
@@ -118,12 +118,13 @@ int main( int argc, char** argv )
 
     if (rank != 0)
     {
-        MPI_Send(worker_matrix, nx * ny, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        MPI_Send(worker_matrix + myStart * nx, (myEnd - myStart) * ny, MPI_INT, 0, 0, MPI_COMM_WORLD);
+
         printf("worker matrix send.\n");
     }
     else
     {
-        MPI_Recv(&master_Matrix, nx * ny, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(&master_Matrix, nx * ny, MPI_INT, 0, MPI_ANY_SOURCE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         printf("matrix recived.\n");
         
         //save image
@@ -133,5 +134,6 @@ int main( int argc, char** argv )
     }
 
     free(worker_matrix);
+    MPI_Finalize();
     return 0;
 }
