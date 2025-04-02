@@ -95,7 +95,7 @@ int main( int argc, char** argv )
    }
     else
    {
-        for (int i = 1; i < numRank - 1 ; i++)
+        for (int i = 1; i < numRank ; i++)
         {
             int startingRow =  i * numele;
             int endingRow = startingRow + numele;
