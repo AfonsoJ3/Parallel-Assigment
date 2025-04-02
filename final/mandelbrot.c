@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "MPI.h"
+#include "mpi.h"
 #include <omp.h>
 
 extern void matToImage(char* name, int* mat, int* dims);
@@ -105,7 +105,7 @@ int main( int argc, char** argv )
     else
     {
         MPI_Recv(&master_Matrix, nx * ny, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("matrix recived.")
+        printf("matrix recived.");
         
         //save image
         int dims[2]={ny,nx};
