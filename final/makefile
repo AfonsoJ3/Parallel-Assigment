@@ -4,7 +4,7 @@ LDC = mpicc
 LD_FLAGS = -lm -fopenmp -lstdc++ -lopencv_core -lopencv_highgui -lopencv_imgproc
 FLAGS = -fopenmp
 CPPFLAGS= -I/usr/include/opencv $(FLAGS)
-PROG = mandelbrot.cx
+PROG = main.cx
 RM= /bin/rm
 
 
