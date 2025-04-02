@@ -67,7 +67,7 @@ int main( int argc, char** argv )
             #pragma omp for nowait schedule(dynamic)
             for(int i = WmyStart; i < WmyEnd; i++)
             {
-                printf("TCS:%d, myStart:%d, myEnd: %d.\n", i, WmyStart, WmyEnd);
+//                printf("TCS:%d, myStart:%d, myEnd: %d.\n", i, WmyStart, WmyEnd);
     
                 for(int j = 0; j < nx; j++)
                 {
