@@ -56,8 +56,8 @@ int main( int argc, char** argv )
     int myStart, myEnd;
     if (rank != 0)
     {
-        MPI_Recv( &myStart, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_COMM_IGNORE);
-        MPI_Recv( &myEnd, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_COMM_IGNORE);
+        MPI_Recv( &myStart, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv( &myEnd, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         printf("Debug: Rank:%d, myStart:%d, myEnd:%d.\n", rank, myStart, myEnd);
     }
     else
@@ -102,7 +102,7 @@ int main( int argc, char** argv )
     }
     else
     {
-        MPI_Recv(&master_Matrix, nx * ny, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_COMM_IGNORE);
+        MPI_Recv(&master_Matrix, nx * ny, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         
         //save image
         int dims[2]={ny,nx};
