@@ -31,7 +31,7 @@ int main( int argc, char** argv )
     int iter=0;
     int* master_Matrix = NULL;
     int numele = nx / numRank;
-    int myStart, myEnd;
+    int WmyStart, WmyEnd;
 
     //Sending job to workers
     if (rank == 0)
@@ -41,9 +41,9 @@ int main( int argc, char** argv )
        for (int i = 0; i < numRank; i++)
        {
             int myStart = i * numele;
-            int myEnd = myStart + numele - 1;
+            int myEnd = myStart + numele;
             
-            if (rank == numRank -1)
+            if (i == numRank -1)
             {
                 myEnd = nx;
             }
@@ -57,17 +57,17 @@ int main( int argc, char** argv )
     }
     else
     {
-        MPI_Recv( &myStart, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        MPI_Recv( &myEnd, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv( &WmyStart, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv( &WmyEnd, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
         //printf("Debug: Rank:%d, myStart:%d, myEnd:%d.\n", rank, myStart, myEnd);
         #pragma omp parallel 
         {
             //create mandelbrot here
             #pragma omp for nowait schedule(dynamic)
-            for(int i = myStart; i < myEnd; i++)
+            for(int i = WmyStart; i < WmyEnd; i++)
             {
-                printf("TCS:%d, myStart:%d, myEnd: %d.\n", i, myStart, myEnd);
+                printf("TCS:%d, myStart:%d, myEnd: %d.\n", i, WmyStart, WmyEnd);
     
                 for(int j = 0; j < nx; j++)
                 {
@@ -87,13 +87,13 @@ int main( int argc, char** argv )
                         if (x * x + y * y > 4) 
                             break;
                     }
-                    worker_matrix[i * nx + j] = iter;
+                    worker_matrix[(i - WmyStart) * nx + j] = iter;
                 }
             }
         }
     }
 
-    if (rank == 1)
+    if (rank == 0)
     {
         free(master_Matrix);
     }
