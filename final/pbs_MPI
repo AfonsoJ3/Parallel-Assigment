@@ -5,5 +5,5 @@
 #PBS -N first_run
 #PBS -j oe
 cd ~/assignments/Parallel-Assigment/final
-mpiexec -bind-to none -np 6 --map-by ppr:1:node --hostfile $PBS_NODEFILE ./*.cx
+mpiexec -bind-to none -np 6 --map-by core  --hostfile $PBS_NODEFILE ./*.cx
 
