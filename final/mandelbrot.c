@@ -45,7 +45,7 @@ int main( int argc, char** argv )
                 myEnd = nx;
             }
 
-            printf("Debug: Rank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",i,numRank, numele, myStart, myEnd);
+            //printf("Debug: Rank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",i,numRank, numele, myStart, myEnd);
             
 
             MPI_Send(&myStart, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
@@ -58,21 +58,22 @@ int main( int argc, char** argv )
     {
         MPI_Recv( &myStart, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         MPI_Recv( &myEnd, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("Debug: Rank:%d, myStart:%d, myEnd:%d.\n", rank, myStart, myEnd);
+        //printf("Debug: Rank:%d, myStart:%d, myEnd:%d.\n", rank, myStart, myEnd);
     }
     else
     {
         myStart = 0;
         myEnd = numele;
-        printf("Debug: Rank:%d, myStart:%d, myEnd:%d.\n", rank, myStart, myEnd);
+        //printf("Debug: Rank:%d, myStart:%d, myEnd:%d.\n", rank, myStart, myEnd);
     }
 
     #pragma omp parallel 
     {
-        #pragma omp for
         //create mandelbrot here
+        #pragma omp for nowait schedule(dynamic)
         for(int i = myStart; i < myEnd; i++)
         {
+            printf("The code got to here.");
             for(int j = 0; j < nx; j++)
             {
                 //chosen a value for C
@@ -99,10 +100,12 @@ int main( int argc, char** argv )
     if (rank != 0)
     {
         MPI_Send(worker_matrix, nx * ny, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        printf("worker matrix send.");
     }
     else
     {
         MPI_Recv(&master_Matrix, nx * ny, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        printf("matrix recived.")
         
         //save image
         int dims[2]={ny,nx};
