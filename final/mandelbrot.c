@@ -32,7 +32,7 @@ int main( int argc, char** argv )
     int iter=0;
     
     int startRow, endRow ;
-    int numele = ny / (numRank - 1);
+    int numele = ny / numRank;
 
     //Inicially work 
     if (rank == 0)
@@ -50,6 +50,7 @@ int main( int argc, char** argv )
             {
                 endingRow= ny;
             }
+            printf("start Row: %d - end row: %d. ", startingRow, endingRow);
 
             MPI_Send( &startingRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
             MPI_Send( &endingRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
@@ -91,11 +92,11 @@ int main( int argc, char** argv )
 
    if (rank != 0)
    {
-     MPI_Send( matrix2, nx*(endRow - startRow), MPI_INT , 0, 0, MPI_COMM_WORLD);
+     MPI_Send( matrix2, nx*(endRow - startRow), MPI_INT, 0, 0, MPI_COMM_WORLD);
    }
     else
    {
-        for (int i = 1; i < numRank ; i++)
+        for (int i = 1; i < numRank - 1; i++)
         {
             int startingRow =  i * numele;
             int endingRow = startingRow + numele;
@@ -104,6 +105,8 @@ int main( int argc, char** argv )
             {
                 endingRow= ny;
             }
+            printf("Recive start Row: %d - end row: %d. ", startingRow, endingRow);
+
             MPI_Recv( matrix + startingRow * nx , nx*(endingRow - startingRow), MPI_INT , i,  0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
 
@@ -113,6 +116,10 @@ int main( int argc, char** argv )
             {
                 matrix[i * nx + j] = matrix2 [i * nx + j];
             }
+        }
+
+        for (int i = 0; i < 10; i++) {
+            printf("Row %d: %d\n", i, matrix[i * nx]);
         }
 
         int dims[2] = {ny, nx};
