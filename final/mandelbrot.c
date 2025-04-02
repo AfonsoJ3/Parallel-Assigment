@@ -30,7 +30,7 @@ int main( int argc, char** argv )
 
     int iter=0;
     int* master_Matrix = NULL;
-
+    int numele = nx / numRank;
     //Sending job to workers
     if (rank == 0)
     {
@@ -38,7 +38,6 @@ int main( int argc, char** argv )
        
        for (int i = 1; i < numRank; i++)
        {
-            int numele = nx / numRank;
             int myStart = i * numele + 1;
             int myEnd = myStart + numele - 1;
             if (rank == numRank -1)
@@ -49,8 +48,8 @@ int main( int argc, char** argv )
             printf("Debug: Rank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",i,numRank, numele, myStart, myEnd);
             
 
-            MPI_Send( &myStart, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-            MPI_Send( &myEnd, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+            MPI_Send(&myStart, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+            MPI_Send(&myEnd, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
        }
     }
     
@@ -59,8 +58,13 @@ int main( int argc, char** argv )
     {
         MPI_Recv( &myStart, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_COMM_IGNORE);
         MPI_Recv( &myEnd, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_COMM_IGNORE);
-        printf("Debug: myStart:%d, myEnd:%d.\n",myStart, myEnd);
-
+        printf("Debug: Rank:%d, myStart:%d, myEnd:%d.\n", rank, myStart, myEnd);
+    }
+    else
+    {
+        myStart = 0;
+        myEnd = numele;
+        printf("Debug: Rank:%d, myStart:%d, myEnd:%d.\n", rank, myStart, myEnd);
     }
 
     #pragma omp parallel 
@@ -72,10 +76,10 @@ int main( int argc, char** argv )
             for(int j = 0; j < nx; j++)
             {
                 //chosen a value for C
-                x0= xStart + (1.0 * j / nx) * (xEnd - xStart);
+                x0 = xStart + (1.0 * j / nx) * (xEnd - xStart);
                 y0 = yStart + (1.0 * i / ny) * (yEnd - yStart);
                 x = 0; 
-                y = 0; //set Z to 0
+                y = 0;//set Z to 0
                 iter = 0;
 
                 while(iter < maxIter)
