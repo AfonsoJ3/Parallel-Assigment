@@ -44,7 +44,7 @@ int main( int argc, char** argv )
        for (int i = 1; i < numRank - 1 ; i++)
        {
             int startingRow =  i * numele;
-            int endingRow = i * numele;
+            int endingRow = startingRow + i * numele;
 
             if (i == numRank - 1)
             {
@@ -64,35 +64,34 @@ int main( int argc, char** argv )
     int* matrix2 = (int*) malloc (nx*(endRow - startRow)*sizeof(int)); 
 
     #pragma omp parallel for schedule(dynamic) collapse(2)
-        //distrubute the rows evenly among MPI ranks.
-        //use the same method as in PA5.x
-
-        //create mandelbrot here
-        for(int i=startRow;i<endRow;i++)
+    //distrubute the rows evenly among MPI ranks.
+    //use the same method as in PA5.x
+    //create mandelbrot here
+    for(int i=startRow;i<endRow;i++)
+    {
+        for(int j=0;j<nx;j++)
         {
-            for(int j=0;j<nx;j++)
-            {
-                //chosen a value for C
-                x0=xStart+(1.0*j/nx)*(xEnd-xStart);
-                y0=yStart+(1.0*i/ny)*(yEnd-yStart);
-                x=0; y=0; //set Z to 0
-                iter=0;
+            //chosen a value for C
+            x0=xStart+(1.0*j/nx)*(xEnd-xStart);
+            y0=yStart+(1.0*i/ny)*(yEnd-yStart);
+            x=0; y=0; //set Z to 0
+            iter=0;
 
-                while(iter<maxIter)
-                {
-                    iter++;
-                    double temp=x*x-y*y+x0;
-                    y=2*x*y+y0;
-                    x=temp;
-                    if(x*x+y*y>4) break;
-                }
-                matrix2[(i - startRow)*nx+j]=iter;
+            while(iter<maxIter)
+            {
+                iter++;
+                double temp=x*x-y*y+x0;
+                y=2*x*y+y0;
+                x=temp;
+                if(x*x+y*y>4) break;
             }
+            matrix2[(i - startRow)*nx+j]=iter;
         }
+    }
 
    if (rank != 0)
    {
-     MPI_Send( matrix, nx*(endRow - startRow), MPI_INT , 0, 0, MPI_COMM_WORLD);
+     MPI_Send( matrix2, nx*(endRow - startRow), MPI_INT , 0, 0, MPI_COMM_WORLD);
    }
     else
    {
@@ -105,7 +104,7 @@ int main( int argc, char** argv )
             {
                 endingRow= ny;
             }
-            MPI_Recv( matrix + startRow * nx , nx*(endRow - startRow), MPI_INT , i,  0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv( matrix + startRow * nx , nx*(endingRow - startingRow), MPI_INT , i,  0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
 
         for (int i = 0; i < endRow; i++) 
