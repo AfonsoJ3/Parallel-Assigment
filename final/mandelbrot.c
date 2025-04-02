@@ -87,7 +87,7 @@ int main( int argc, char** argv )
                         if (x * x + y * y > 4) 
                             break;
                     }
-                    worker_matrix[(i - WmyStart) * nx + j] = iter;
+                    worker_matrix[i * nx + j] = iter;
                 }
             }
         }
@@ -97,12 +97,12 @@ int main( int argc, char** argv )
     {
         MPI_Send(worker_matrix, (WmyEnd - WmyStart) * ny, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
-        printf("worker matrix send.\n");
+        printf("\nworker matrix send.\n");
     }
     else
     {
         MPI_Recv(master_Matrix, nx * ny, MPI_INT, 0, MPI_ANY_SOURCE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("matrix recived.\n");
+        printf("\nmatrix recived.\n");
         
         //save image
         int dims[2]={ny,nx};
