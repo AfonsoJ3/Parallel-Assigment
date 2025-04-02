@@ -63,7 +63,8 @@ int main( int argc, char** argv )
 
     int* matrix2 = (int*) malloc (nx*(startRow - endRow)*sizeof(int)); 
 
-    #pragma omp parallel for schedule(dynamic) collapse(2){
+    #pragma omp parallel for schedule(dynamic) collapse(2)
+    {
         //distrubute the rows evenly among MPI ranks.
         //use the same method as in PA5.x
 
@@ -93,7 +94,7 @@ int main( int argc, char** argv )
 
    if (rank != 0)
    {
-     MPI_Send( matrix, nx*(startRow - endRow), MPI_INT , 0, 0, MPI_STATUS_IGNORE);
+     MPI_Send( matrix, nx*(startRow - endRow), MPI_INT , 0, 0, MPI_COMM_WORLD);
    }
     else
    {
