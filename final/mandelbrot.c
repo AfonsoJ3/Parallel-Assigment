@@ -46,10 +46,8 @@ int main( int argc, char** argv )
                 myEnd = nx;
             }
 
-            if (i == 3)
-            {
-                printf("Debug: Rank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",i,numRank, numele, myStart, myEnd);
-            }
+            printf("Debug: Rank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",i,numRank, numele, myStart, myEnd);
+            
 
             MPI_Send( &myStart, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
             MPI_Send( &myEnd, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
