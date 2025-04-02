@@ -45,7 +45,7 @@ int main( int argc, char** argv )
                 myEnd = nx;
             }
 
-            //printf("Debug: Rank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",i,numRank, numele, myStart, myEnd);
+            printf("Debug: Rank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",i,numRank, numele, myStart, myEnd);
             
 
             MPI_Send(&myStart, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
@@ -73,15 +73,7 @@ int main( int argc, char** argv )
         #pragma omp for nowait schedule(dynamic)
         for(int i = myStart; i < myEnd; i++)
         {
-            if (i == 0)
-            {
-                printf("The code got to here.\n");
-            }
-            
-            if (i == nx)
-            {
-                printf("The code got to here.\n");
-            }
+            printf("TCS:%d, myStart:%d, myEnd: %d.\n", i, myStart, myEnd);
 
             for(int j = 0; j < nx; j++)
             {
@@ -102,15 +94,6 @@ int main( int argc, char** argv )
                         break;
                 }
                 worker_matrix[i * nx + j] = iter;
-            }
-            if (i == 0)
-            {
-                printf("1- worker matrix got assing.\n");
-            }
-            
-            if (i == nx)
-            {
-                printf("900- worker matrix got assing.\n");
             }
 
         }
