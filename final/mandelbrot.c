@@ -61,10 +61,9 @@ int main( int argc, char** argv )
         MPI_Recv( &endRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD,  MPI_STATUS_IGNORE);
     }
 
-    int* matrix2 = (int*) malloc (nx*(startRow - endRow)*sizeof(int)); 
+    int* matrix2 = (int*) malloc (nx*(endRow - startRow)*sizeof(int)); 
 
     #pragma omp parallel for schedule(dynamic) collapse(2)
-    {
         //distrubute the rows evenly among MPI ranks.
         //use the same method as in PA5.x
 
@@ -90,11 +89,10 @@ int main( int argc, char** argv )
                 matrix2[(i - startRow)*nx+j]=iter;
             }
         }
-   }
 
    if (rank != 0)
    {
-     MPI_Send( matrix, nx*(startRow - endRow), MPI_INT , 0, 0, MPI_COMM_WORLD);
+     MPI_Send( matrix, nx*(endRow - startRow), MPI_INT , 0, 0, MPI_COMM_WORLD);
    }
     else
    {
@@ -107,7 +105,7 @@ int main( int argc, char** argv )
             {
                 endingRow= ny;
             }
-            MPI_Recv( matrix + startRow * nx , nx*(startRow - endRow), MPI_INT , i,  0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv( matrix + startRow * nx , nx*(endRow - startRow), MPI_INT , i,  0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
 
         for (int i = 0; i < endRow; i++) 
