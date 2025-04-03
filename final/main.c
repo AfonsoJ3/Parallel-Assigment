@@ -16,7 +16,7 @@ int main( int argc, char** argv )
     //setup mandelbrot data
     int nx=900;
     int ny=600;
-    int* matrix = (int*) malloc(nx* ny * sizeof(int));;
+    int* matrix = (int*) malloc(nx* ny * sizeof(int));
     double xStart=-2;
     double xEnd=1;
     double yStart=-1;
@@ -33,13 +33,18 @@ int main( int argc, char** argv )
 
 
     int workers = numRank - 1;
-    int numele = ny / numRank - 1;
+    int numele = 10;
     if (rank == 0)
     {
+        int* master_matrix = (int*) malloc(nx* ny * sizeof(int));
+        int startRow;
+        int endRow;
+        int killSignal;
+
         for (int i = 1; i < numRank; i++)
         {
-            int startRow = (i - 1) * numele;
-            int endRow = startRow + numele - 1;
+            startRow = (i - 1) * numele;
+            endRow = startRow + numele - 1;
             if (i == numele - 1)
             {
                 endRow = ny;
@@ -49,14 +54,55 @@ int main( int argc, char** argv )
             {
                 MPI_Send(&startRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 MPI_Send(&endRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+
+                if(i == 5)
+                {
+                    printf("Rank:%d, Start: %d, end: %d\n", i, startRow, endRow);
+                }
             }
             else 
             {
-                int killSignal = -1;
+                killSignal = -1;
                 MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 workers --;
             }
              
+        }
+
+        while(workers < 0)
+        {
+            
+            MPI_Recv( master_matrix, nx*ny, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv( &startRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv( &endRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            
+            if (startRow <= ny)
+            {
+
+                for (int i = 1; i < numRank; i++)
+                {
+                    startRow = (i - 1) * numele;
+                    endRow = startRow + numele - 1;
+                    if (i == numele - 1)
+                    {
+                        endRow = ny;
+                    }
+
+                    if(i == 5)
+                    {
+                        printf("Rank:%d, Start: %d, end: %d\n", i, startRow, endRow);
+                    }
+                    MPI_Send(&startRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                    MPI_Send(&endRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+
+                }
+            }
+        }
+        else 
+        {
+            int killSignal = -1;
+            MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+            workers --;
         }
 
         int dims[2]={ny,nx};
@@ -69,6 +115,11 @@ int main( int argc, char** argv )
         //MPI_Recv(&killSignal, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
         bool hasWork = true;
+
+        if(i == 5)
+        {
+            printf("Rank:%d, Start: %d, end: %d\n", i, startRow, endRow);
+        }
 
         while(hasWork)
         {
@@ -105,6 +156,8 @@ int main( int argc, char** argv )
                         matrix[(i - startRow) * nx + j] = iter;
                     }       
                 }
+
+                MPI_Send(matrix , nx * ny, MPI_INT, 0, 0, MPI_COMM_WORLD);
             }
         
         }
