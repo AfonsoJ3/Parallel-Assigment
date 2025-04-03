@@ -25,4 +25,4 @@ $(PROG): $(OBJS) $(TOOLS)
 
 #clean rule
 clean:
-	$(RM) -rf *.o *.x *.cx *.mod first_run.*
+	$(RM) -rf *.o *.x *.cx *.mod first_run.* 
