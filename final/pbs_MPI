@@ -6,4 +6,4 @@
 #PBS -j oe
 cd ~/assignments/Parallel-Assigment/final
 export OMP_NUM_THREADS=1
-mpiexec -np 6 --map-by ppr:1:node --bind-to none --hostfile $PBS_NODEFILE ./main.cx 
+mpiexec -np 6 --map-by ppr:1:node --bind-to none --hostfile $PBS_NODEFILE ./*.cx 
