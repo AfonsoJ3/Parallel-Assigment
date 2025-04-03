@@ -76,35 +76,30 @@ int main( int argc, char** argv )
             MPI_Recv( &startRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             MPI_Recv( &endRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             
-            if (startRow <= ny)
+            
+
+            for (int i = 1; i < numRank; i++)
             {
+                startRow = (i - 1) * numele;
+                endRow = startRow + numele - 1;
 
-                for (int i = 1; i < numRank; i++)
+                if (i == numele - 1)
                 {
-                    startRow = (i - 1) * numele;
-                    endRow = startRow + numele - 1;
-                    if (i == numele - 1)
-                    {
-                        endRow = ny;
-                    }
+                    endRow = ny;
+                }
 
+                if (startRow <= ny)
+                {
                     if(i == 5)
                     {
                         printf("Rank:%d, Start: %d, end: %d\n", i, startRow, endRow);
                     }
                     MPI_Send(&startRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                     MPI_Send(&endRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-
                 }
-            }
+            }    
+            
         }
-        else 
-        {
-            int killSignal = -1;
-            MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-            workers --;
-        }
-
         int dims[2]={ny,nx};
         matToImage("mandelbrot.jpg",matrix,dims);
     } 
