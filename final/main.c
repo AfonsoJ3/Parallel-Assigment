@@ -6,155 +6,117 @@
 
 extern void matToImage(char* name, int* mat, int* dims);
 
-int main( int argc, char** argv ) 
-{
-    int rank, numRank;
+int main(int argc, char** argv) {
+    int rank, numRanks;
     MPI_Init(&argc, &argv);
-    MPI_Comm_rank( MPI_COMM_WORLD, &rank);
-    MPI_Comm_size( MPI_COMM_WORLD, &numRank);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &numRanks);
 
-    //setup mandelbrot data
-    int nx=900;
-    int ny=600;
-    int* matrix = (int*) malloc(nx* ny * sizeof(int));
-    double xStart=-2;
-    double xEnd=1;
-    double yStart=-1;
-    double yEnd=1;
-    int maxIter=255;
-    //C=x0+iy0
-    double x0=0;
-    double y0=0;
-    //Z=x+iy
-    double x=0;
-    double y=0;
+    // Mandelbrot parameters
+    int nx = 900, ny = 600, maxIter = 255;
+    double xStart = -2, xEnd = 1, yStart = -1, yEnd = 1;
 
-    int iter=0;
+    int* matrix = (int*)malloc(nx * ny * sizeof(int));
+    int numele = 10; // Number of rows per task
+    int workers = numRanks - 1;
 
+    if (rank == 0) {
+        // Master process
+        int* master_matrix = (int*)malloc(nx * ny * sizeof(int));
+        int nextRow = 0, activeWorkers = 0;
 
-    int workers = numRank - 1;
-    int numele = 10;
-    if (rank == 0)
-    {
-        int* master_matrix = (int*) malloc(nx* ny * sizeof(int));
-        int startRow;
-        int endRow;
-        int killSignal;
+        // Assign initial work to workers
+        for (int i = 1; i < numRanks; i++) {
+            if (nextRow < ny) {
+                int startRow = nextRow;
+                int endRow = startRow + numele;
+                if (endRow > ny) endRow = ny;
 
-        for (int i = 1; i < numRank; i++)
-        {
-            startRow = (i - 1) * numele;
-            endRow = startRow + numele - 1;
-            if (i == numele - 1)
-            {
-                endRow = ny;
-            }
-
-            if (startRow <= ny)
-            {
                 MPI_Send(&startRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                MPI_Send(&endRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-
-                if(i == 5)
-                {
-                    printf("Rank:%d, Start: %d, end: %d\n", i, startRow, endRow);
-                }
-            }
-            else 
-            {
-                killSignal = -1;
+                MPI_Send(&endRow, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
+                nextRow = endRow;
+                activeWorkers++;
+            } else {
+                int killSignal = -1;
                 MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                workers --;
             }
-             
         }
 
-        while(workers < 0)
-        {
-            
-            MPI_Recv( master_matrix, nx*ny, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv( &startRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv( &endRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            
-            
+        // Receive results and assign new work dynamically
+        while (activeWorkers > 0) {
+            int startRow, endRow;
+            MPI_Status status;
 
-            for (int i = 1; i < numRank; i++)
-            {
-                startRow = (i - 1) * numele;
-                endRow = startRow + numele - 1;
+            // Receive completed chunk from a worker
+            MPI_Recv(matrix, numele * nx, MPI_INT, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, &status);
+            int workerRank = status.MPI_SOURCE;
+            MPI_Recv(&startRow, 1, MPI_INT, workerRank, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&endRow, 1, MPI_INT, workerRank, 4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-                if (i == numele - 1)
-                {
-                    endRow = ny;
+            // Store received results in the master matrix
+            for (int i = startRow; i < endRow; i++) {
+                for (int j = 0; j < nx; j++) {
+                    master_matrix[i * nx + j] = matrix[(i - startRow) * nx + j];
                 }
+            }
 
-                if (startRow <= ny)
-                {
-                    if(i == 5)
-                    {
-                        printf("Rank:%d, Start: %d, end: %d\n", i, startRow, endRow);
-                    }
-                    MPI_Send(&startRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                    MPI_Send(&endRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                }
-            }    
-            
+            // Assign new work or terminate worker
+            if (nextRow < ny) {
+                startRow = nextRow;
+                endRow = startRow + numele;
+                if (endRow > ny) endRow = ny;
+
+                MPI_Send(&startRow, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
+                MPI_Send(&endRow, 1, MPI_INT, workerRank, 1, MPI_COMM_WORLD);
+                nextRow = endRow;
+            } else {
+                int killSignal = -1;
+                MPI_Send(&killSignal, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
+                activeWorkers--;
+            }
         }
-        int dims[2]={ny,nx};
-        matToImage("mandelbrot.jpg",matrix,dims);
+
+        // Save final image
+        int dims[2] = {ny, nx};
+        matToImage("mandelbrot.jpg", master_matrix, dims);
+        free(master_matrix);
     } 
-    else
-    {
-        int startRow, endRow, killSignal;
-        MPI_Recv(&startRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        //MPI_Recv(&killSignal, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    else {
+        // Worker processes
+        int startRow, endRow;
+        while (1) {
+            MPI_Recv(&startRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            if (startRow == -1) break; // Termination signal
 
-        bool hasWork = true;
+            MPI_Recv(&endRow, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            int chunkSize = (endRow - startRow) * nx;
+            int* local_matrix = (int*)malloc(chunkSize * sizeof(int));
 
-        if(i == 5)
-        {
-            printf("Rank:%d, Start: %d, end: %d\n", i, startRow, endRow);
-        }
+            #pragma omp parallel for schedule(dynamic)
+            for (int i = startRow; i < endRow; i++) {
+                for (int j = 0; j < nx; j++) {
+                    double x0 = xStart + (1.0 * j / nx) * (xEnd - xStart);
+                    double y0 = yStart + (1.0 * i / ny) * (yEnd - yStart);
+                    double x = 0, y = 0;
+                    int iter = 0;
 
-        while(hasWork)
-        {
-            if (startRow == -1)
-            {
-                break;
-            }
-
-            MPI_Recv(&endRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-            #pragma omp parallel
-            { 
-                #pragma omp for nowait schedule(dynamic)
-                for(int i = startRow; i < endRow; i++)
-                {
-                    for(int j = 0; j < nx; j++)
-                    {
-                        //chosen a value for C
-                        x0 = xStart + (1.0 * j / nx) * (xEnd - xStart);
-                        y0 = yStart + (1.0 * i / ny) * (yEnd - yStart);
-                        x = 0; 
-                        y = 0;//set Z to 0
-                        iter = 0;
-
-                        while(iter < maxIter)
-                        {
-                            iter++;
-                            double temp = x * x - y * y + x0;
-                            y = 2 * x * y + y0;
-                            x = temp;
-                            if (x * x + y * y > 4) 
-                                break;
-                        }
-                        matrix[(i - startRow) * nx + j] = iter;
-                    }       
+                    while (iter < maxIter) {
+                        iter++;
+                        double temp = x * x - y * y + x0;
+                        y = 2 * x * y + y0;
+                        x = temp;
+                        if (x * x + y * y > 4) break;
+                    }
+                    local_matrix[(i - startRow) * nx + j] = iter;
                 }
-
-                MPI_Send(matrix , nx * ny, MPI_INT, 0, 0, MPI_COMM_WORLD);
             }
-        
+
+            // Send results back to the master
+            MPI_Send(local_matrix, chunkSize, MPI_INT, 0, 2, MPI_COMM_WORLD);
+            MPI_Send(&startRow, 1, MPI_INT, 0, 3, MPI_COMM_WORLD);
+            MPI_Send(&endRow, 1, MPI_INT, 0, 4, MPI_COMM_WORLD);
+
+            free(local_matrix);
         }
     }
 
