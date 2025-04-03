@@ -15,7 +15,7 @@ int main( int argc, char** argv )
     //setup mandelbrot data
     int nx=900;
     int ny=600;
-    int* worker_matrix = NULL;
+    int* worker_matrix = (int*) malloc(nx* ny * sizeof(int));;
     double xStart=-2;
     double xEnd=1;
     double yStart=-1;
@@ -57,7 +57,6 @@ int main( int argc, char** argv )
     }
     else
     {
-        worker_matrix = (int*) malloc ( (WmyEnd - WmyStart) * ny * sizeof(int));
         MPI_Recv( &WmyStart, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         MPI_Recv( &WmyEnd, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
@@ -88,7 +87,7 @@ int main( int argc, char** argv )
                         if (x * x + y * y > 4) 
                             break;
                     }
-                    worker_matrix[(i - WmyStart) * nx + j] = iter;
+                    worker_matrix[i * nx + j] = iter;
                 }
             }
         }
