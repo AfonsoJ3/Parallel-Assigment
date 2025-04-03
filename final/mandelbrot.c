@@ -87,7 +87,7 @@ int main( int argc, char** argv )
                         if (x * x + y * y > 4) 
                             break;
                     }
-                    worker_matrix[i * nx + j] = iter;
+                    worker_matrix[(i - WmyStart) * nx + j] = iter;
                 }
             }
         }
