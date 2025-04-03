@@ -54,7 +54,7 @@ int main(int argc, char** argv)
         matToImage("mandelbrot.jpg", matrix, dims);
         free(matrix);
     } else {
-        while (true) {
+        while (1) {
             int rowIdx;
             MPI_Recv(&rowIdx, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             if (rowIdx == -1) break;
