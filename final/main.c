@@ -13,11 +13,16 @@ int main(int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &numRanks);
 
     // Mandelbrot parameters
-    int nx = 900, ny = 600, maxIter = 255;
-    double xStart = -2, xEnd = 1, yStart = -1, yEnd = 1;
+    int nx = 900;
+    int ny = 600;
+    int maxIter = 255;
+    double xStart = -2;
+    double xEnd = 1;
+    double yStart = -1; 
+    double yEnd = 1;
 
     int* matrix = (int*)malloc(nx * ny * sizeof(int));
-    int numele = 10; // Number of rows per task
+    int numele = ny/numRanks; // Number of rows per task
     int workers = numRanks - 1;
 
     if (rank == 0) {
@@ -30,13 +35,19 @@ int main(int argc, char** argv) {
             if (nextRow < ny) {
                 int startRow = nextRow;
                 int endRow = startRow + numele;
-                if (endRow > ny) endRow = ny;
+                if (endRow > ny) 
+                {
+                    endRow = ny;
+                }
+
 
                 MPI_Send(&startRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 MPI_Send(&endRow, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
                 nextRow = endRow;
                 activeWorkers++;
-            } else {
+            } 
+            else 
+            {
                 int killSignal = -1;
                 MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
             }
@@ -54,14 +65,17 @@ int main(int argc, char** argv) {
             MPI_Recv(&endRow, 1, MPI_INT, workerRank, 4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
             // Store received results in the master matrix
-            for (int i = startRow; i < endRow; i++) {
-                for (int j = 0; j < nx; j++) {
+            for (int i = startRow; i < endRow; i++) 
+            {
+                for (int j = 0; j < nx; j++) 
+                {
                     master_matrix[i * nx + j] = matrix[(i - startRow) * nx + j];
                 }
             }
 
             // Assign new work or terminate worker
-            if (nextRow < ny) {
+            if (nextRow < ny) 
+            {
                 startRow = nextRow;
                 endRow = startRow + numele;
                 if (endRow > ny) endRow = ny;
@@ -69,7 +83,9 @@ int main(int argc, char** argv) {
                 MPI_Send(&startRow, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
                 MPI_Send(&endRow, 1, MPI_INT, workerRank, 1, MPI_COMM_WORLD);
                 nextRow = endRow;
-            } else {
+            } 
+            else 
+            {
                 int killSignal = -1;
                 MPI_Send(&killSignal, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
                 activeWorkers--;
@@ -81,12 +97,19 @@ int main(int argc, char** argv) {
         matToImage("mandelbrot.jpg", master_matrix, dims);
         free(master_matrix);
     } 
-    else {
+
+    else
+    {
         // Worker processes
         int startRow, endRow;
-        while (1) {
+        while (1) 
+        {
             MPI_Recv(&startRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            if (startRow == -1) break; // Termination signal
+            if (startRow == -1) 
+            {
+                break; // Termination signal
+            }
+
 
             MPI_Recv(&endRow, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             int chunkSize = (endRow - startRow) * nx;
