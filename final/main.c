@@ -102,7 +102,7 @@ int main( int argc, char** argv )
                             if (x * x + y * y > 4) 
                                 break;
                         }
-                        matrix[i * nx + j] = iter;
+                        matrix[(i - startRow) * nx + j] = iter;
                     }       
                 }
             }
