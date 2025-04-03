@@ -66,19 +66,27 @@ int main(int argc, char** argv)
             #pragma omp parallel 
             {
                 #pragma omp for nowait schedule(dynamic)
-                for (int j = 0; j < nx; j++) {
-                    x0 = xStart + (1.0 * j / nx) * (xEnd - xStart);
-                    y0 = yStart + (1.0 * rowIdx / ny) * (yEnd - yStart);
-                    x = 0; y = 0; 
-                    iter = 0;
-                    while (iter < maxIter) {
-                        iter++;
-                        double temp = x * x - y * y + x0;
-                        y = 2 * x * y + y0;
-                        x = temp;
-                        if (x * x + y * y > 4) break;
+                for(int i = rowIdx; i < rowIdx; i++)
+                {
+                    for(int j = 0; j < nx; j++)
+                    {
+                        x0 = xStart + (1.0 * j / nx) * (xEnd - xStart);
+                        y0 = yStart + (1.0 * i / ny) * (yEnd - yStart);
+                        x = 0;
+                        y = 0;
+                        iter = 0;
+                        
+                        while(iter < maxIter)
+                        {
+                            iter++;
+                            double temp = x * x - y * y + x0;
+                            y = 2 * x * y + y0;
+                            x = temp;
+                            if (x * x + y * y > 4) 
+                                break;
+                        }
+                        rowData[j] = iter;
                     }
-                    rowData[j] = iter;
                 }
             }
             
