@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "mpi.h"
 #include <omp.h>
+#include <stdbool.h>
 
 extern void matToImage(char* name, int* mat, int* dims);
 
@@ -46,13 +47,13 @@ int main( int argc, char** argv )
 
             if (startRow <= ny)
             {
-                MPI_Send(&startRow, 1, MPPI_INT, i, 0, MPI_COMM_WORLD);
-                MPI_Send(&endRow, 1, MPPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&endRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
             }
             else 
             {
                 int killSignal = -1;
-                MPI_Send(&killSignal, 1, MPPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&killSignal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 workers --;
             }
              
