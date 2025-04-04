@@ -45,7 +45,7 @@ int main( int argc, char** argv )
             myStart = (i - 1) * numele;
             myEnd = myStart + numele - 1;
             
-            if (i == numRank -1)
+            if (myEnd > ny)
             {
                 myEnd = nx;
             }
