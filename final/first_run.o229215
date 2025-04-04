@@ -13,4 +13,4 @@ Debug: Kick of.
  Rank:5, numRank:6, numele:100, myStart:400, myEnd:499.
 Start row and end row received.
 Start row and end row received.
-=>> PBS: job killed: walltime 372 exceeded limit 360
+=>> PBS: job killed: walltime 364 exceeded limit 360

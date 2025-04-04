@@ -73,7 +73,7 @@ int main( int argc, char** argv )
             {
                 for (int j = 0; j < nx; j++) 
                 {
-                    master_matrix[i * nx + j] = matrix[(i - myStart) * nx + j];
+                    master_Matrix[i * nx + j] = matrix[(i - myStart) * nx + j];
                 }
             }
 
