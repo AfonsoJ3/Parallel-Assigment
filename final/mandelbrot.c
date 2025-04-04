@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "mpi.h"
 #include <omp.h>
+#include <stdbool.h>
 
 extern void matToImage(char* name, int* mat, int* dims);
 
@@ -30,7 +31,6 @@ int main( int argc, char** argv )
     int iter=0;
     int* master_Matrix = NULL;
     int numele = 100;
-    int WmyStart, WmyEnd;
 
     //Sending job to workers
     if (rank == 0)
@@ -61,7 +61,7 @@ int main( int argc, char** argv )
        {
             MPI_Recv(&myStart, 1, MPI_INT, MPI_ANY_SOURCE, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             int workerRank = MPI_ANY_SOURCE;
-            MPI_Recv(&master_Matrix[myStart * nx], (myEnd * myStart) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&master_Matrix[myStart * nx], (myEnd - myStart) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
             //Bookkeeping
             if (myStart > ny)
@@ -82,7 +82,7 @@ int main( int argc, char** argv )
             MPI_Send(&myStart, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
             MPI_Send(&myEnd, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
 
-            if (activeWorkers == )
+            if (activeWorkers == 0)
             {
                 break;
             }
@@ -90,7 +90,7 @@ int main( int argc, char** argv )
         int dims[2]={ny,nx};
         matToImage("mandelbrot.jpg",master_Matrix,dims);
 
-        free(master_Matrix)
+        free(master_Matrix);
         MPI_Finalize();
         return 0;
     }
@@ -134,7 +134,7 @@ int main( int argc, char** argv )
                             if (x * x + y * y > 4) 
                                 break;
                         }
-                        worker_matrix[(i - WmyStart) * nx + j] = iter;
+                        worker_matrix[(i - startRow) * nx + j] = iter;
                     }
                 }
             }
