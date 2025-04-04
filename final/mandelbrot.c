@@ -31,11 +31,13 @@ int main( int argc, char** argv )
     int iter=0;
     int* master_Matrix = NULL;
     int numele = 100;
+    
 
     //Sending job to workers
     if (rank == 0)
     {
        master_Matrix = (int*) malloc (nx * ny * sizeof(int));
+       int* matrix = (int*)malloc(nx * ny * sizeof(int));
        int myStart, myEnd;
        int activeWorkers = numRank - 1;
 
@@ -62,9 +64,18 @@ int main( int argc, char** argv )
             MPI_Status status;
             MPI_Recv(&myStart, 1, MPI_INT, MPI_ANY_SOURCE, 1 , MPI_COMM_WORLD, &status);
             int workerRank = status.MPI_SOURCE;
-            MPI_Recv(&master_Matrix[myStart * nx], (myEnd - myStart) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
+            //MPI_Recv(&master_Matrix[myStart * nx], (myEnd - myStart + 1) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(matrix, numele * nx, MPI_INT, workerRank, 2, MPI_COMM_WORLD, &status);
+            
             printf("Debug: Received.\nRank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",workerRank,numRank, numele, myStart, myEnd);
+
+            for (int i = myStart; i < myEnd; i++) 
+            {
+                for (int j = 0; j < nx; j++) 
+                {
+                    master_matrix[i * nx + j] = matrix[(i - myStart) * nx + j];
+                }
+            }
 
             //Bookkeeping
             if (myEnd < ny)
