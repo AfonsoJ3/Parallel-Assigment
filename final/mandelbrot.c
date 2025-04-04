@@ -40,7 +40,7 @@ int main( int argc, char** argv )
        int activeWorkers = numRank - 1;
 
        
-       for (int i = 1; i < numRank - 1; i++)
+       for (int i = 1; i < numRank; i++)
        {
             myStart = (i - 1) * numele;
             myEnd = myStart + numele - 1;
@@ -63,21 +63,25 @@ int main( int argc, char** argv )
             int workerRank = MPI_ANY_SOURCE;
             MPI_Recv(&master_Matrix[myStart * nx], (myEnd - myStart) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
+            printf("Debug: Received.\nRank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",rank,numRank, numele, myStart, myEnd);
+
             //Bookkeeping
             if (myStart > ny)
             {
                 myStart = -1;
                 activeWorkers--;
             }
-
-            myStart = myEnd + 1;
-            myEnd = myStart + numele - 1;
-            if (myEnd > ny) 
+            else 
             {
-                myEnd = ny;
+                myStart = myEnd + 1;
+                myEnd = myStart + numele - 1;
+                if (myEnd > ny) 
+                {
+                    myEnd = ny;
+                }
             }
 
-            printf("Debug: In While Loop. \nRank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",i,numRank, numele, myStart, myEnd);
+            printf("Debug: In While Loop. \nRank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",rank,numRank, numele, myStart, myEnd);
 
             MPI_Send(&myStart, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
             MPI_Send(&myEnd, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
@@ -100,7 +104,9 @@ int main( int argc, char** argv )
         {
             int startRow, endRow;
             MPI_Recv(&startRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv(&endRow, 1, MPI_INT, 0, 0,PI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&endRow, 1, MPI_INT, 0, 0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+            printf("Start row and end row received.");
 
             int* worker_matrix = (int*)malloc((endRow - startRow) * nx * sizeof(int));
 
