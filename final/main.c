@@ -2,19 +2,20 @@
 #include <stdio.h>
 #include "mpi.h"
 #include <omp.h>
-#include <stdbool.h>
+//#include <stdbool.h>
 
 extern void matToImage(char* name, int* mat, int* dims);
 
 int main(int argc, char** argv) {
     int rank, numRanks;
+    bool runOnce = true;
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &numRanks);
 
     // Mandelbrot parameters
-    int nx = 4096;
-    int ny = 2160;
+    int nx = 7680 ;
+    int ny = 4320;
     int maxIter = 255;
     double xStart = -2;
     double xEnd = 1;
@@ -22,7 +23,7 @@ int main(int argc, char** argv) {
     double yEnd = 1;
 
     int* matrix = (int*)malloc(nx * ny * sizeof(int));
-    int numele = ny/numRanks; // Number of rows per task
+    int numele = 100; // Number of rows per task
     int workers = numRanks - 1;
 
     if (rank == 0) {
@@ -115,15 +116,23 @@ int main(int argc, char** argv) {
             int chunkSize = (endRow - startRow) * nx;
             int* local_matrix = (int*)malloc(chunkSize * sizeof(int));
 
-            #pragma omp parallel for schedule(dynamic)
-            for (int i = startRow; i < endRow; i++) {
-                for (int j = 0; j < nx; j++) {
+            double RankStart = MPI_Wtime();
+            #pragma omp parallel
+            {
+                #pragma omp parallel for nowait schedule(dynamic)
+                int tid = omp_get_thread_num();
+                double start = omp_get_wtime();
+                for (int i = startRow; i < endRow; i++) 
+                {
+                    for (int j = 0; j < nx; j++) 
+                    {
                     double x0 = xStart + (1.0 * j / nx) * (xEnd - xStart);
                     double y0 = yStart + (1.0 * i / ny) * (yEnd - yStart);
                     double x = 0, y = 0;
                     int iter = 0;
 
-                    while (iter < maxIter) {
+                    while (iter < maxIter) 
+                    {
                         iter++;
                         double temp = x * x - y * y + x0;
                         y = 2 * x * y + y0;
@@ -131,9 +140,24 @@ int main(int argc, char** argv) {
                         if (x * x + y * y > 4) break;
                     }
                     local_matrix[(i - startRow) * nx + j] = iter;
+                    }
+                }
+                double end = omp_get_wtime();
+                if (rank == 2) 
+                {
+                    printf("Rank: %d,TID: %d, Time taken: %f seconds\n", rank, tid, end - start);
                 }
             }
-
+            double RankEnd = MPI_Wtime();
+           
+            if (startRow == 1000 && endRow == 1100)
+            {
+                if (runOnce) 
+                {
+                    printf("Rank: %d, Time taken: %f seconds\n\n", rank, RankEnd - RankStart);
+                    runOnce = false;
+                }
+            }
             // Send results back to the master
             MPI_Send(local_matrix, chunkSize, MPI_INT, 0, 2, MPI_COMM_WORLD);
             MPI_Send(&startRow, 1, MPI_INT, 0, 3, MPI_COMM_WORLD);
