@@ -1,0 +1,16 @@
+Debug: Kick of.
+ Rank:1, numRank:6, numele:100, myStart:0, myEnd:99.
+Debug: Kick of.
+ Rank:2, numRank:6, numele:100, myStart:100, myEnd:199.
+Start row and end row received.
+Debug: Kick of.
+ Rank:3, numRank:6, numele:100, myStart:200, myEnd:299.
+Start row and end row received.
+Debug: Kick of.
+ Rank:4, numRank:6, numele:100, myStart:300, myEnd:399.
+Start row and end row received.
+Debug: Kick of.
+ Rank:5, numRank:6, numele:100, myStart:400, myEnd:7680.
+Start row and end row received.
+Start row and end row received.
+=>> PBS: job killed: walltime 394 exceeded limit 360
