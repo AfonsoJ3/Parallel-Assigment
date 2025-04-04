@@ -13,8 +13,8 @@ int main(int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &numRanks);
 
     // Mandelbrot parameters
-    int nx = 900;
-    int ny = 600;
+    int nx = 4096;
+    int ny = 2160;
     int maxIter = 255;
     double xStart = -2;
     double xEnd = 1;
