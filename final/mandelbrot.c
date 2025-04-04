@@ -57,21 +57,17 @@ int main( int argc, char** argv )
             MPI_Send(&myEnd, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
        }
 
-       while (true)
+       while (activeWorkers == 0)
        {
-            MPI_Recv(&myStart, 1, MPI_INT, MPI_ANY_SOURCE, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            int workerRank = MPI_ANY_SOURCE;
+            MPI_Status status;
+            MPI_Recv(&myStart, 1, MPI_INT, MPI_ANY_SOURCE, 1 , MPI_COMM_WORLD, &status);
+            int workerRank = status.MPI_SOURCE;
             MPI_Recv(&master_Matrix[myStart * nx], (myEnd - myStart) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
             printf("Debug: Received.\nRank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",workerRank,numRank, numele, myStart, myEnd);
 
             //Bookkeeping
-            if (myStart > ny)
-            {
-                myStart = -1;
-                activeWorkers--;
-            }
-            else 
+            if (myEnd < ny)
             {
                 myStart = myEnd + 1;
                 myEnd = myStart + numele - 1;
@@ -80,16 +76,17 @@ int main( int argc, char** argv )
                     myEnd = ny;
                 }
             }
+            else 
+            {
+                myStart = -1;
+                activeWorkers--;
+            }
 
             printf("Debug: In While Loop. \nRank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",rank,numRank, numele, myStart, myEnd);
 
             MPI_Send(&myStart, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
             MPI_Send(&myEnd, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
 
-            if (activeWorkers == 0)
-            {
-                break;
-            }
        }
         int dims[2]={ny,nx};
         matToImage("mandelbrot.jpg",master_Matrix,dims);
