@@ -119,9 +119,9 @@ int main(int argc, char** argv) {
             double RankStart = MPI_Wtime();
             #pragma omp parallel
             {
-		int tid = omp_get_thread_num();
+                #pragma omp parallel for nowait schedule(dynamic)
+                int tid = omp_get_thread_num();
                 double start = omp_get_wtime();
-                #pragma omp for nowait schedule(dynamic)
                 for (int i = startRow; i < endRow; i++) 
                 {
                     for (int j = 0; j < nx; j++) 
@@ -145,16 +145,19 @@ int main(int argc, char** argv) {
                 double end = omp_get_wtime();
                 if (rank == 2) 
                 {
-                    printf("Rank: %d,TID: %d, Time taken: %f seconds, Range: %d until %d\n", rank, tid, end - start, startRow, endRow);
+                    printf("Rank: %d,TID: %d, Time taken: %f seconds\n", rank, tid, end - start);
                 }
             }
             double RankEnd = MPI_Wtime();
-      
-          
-            printf("Rank: %d, Time taken: %f seconds, Range: %d until %d\n", rank, RankEnd - RankStart, startRow, endRow);
-              
-            
-     
+           
+            if (startRow == 1000 && endRow == 1100)
+            {
+                if (runOnce) 
+                {
+                    printf("Rank: %d, Time taken: %f seconds\n\n", rank, RankEnd - RankStart);
+                    runOnce = false;
+                }
+            }
             // Send results back to the master
             MPI_Send(local_matrix, chunkSize, MPI_INT, 0, 2, MPI_COMM_WORLD);
             MPI_Send(&startRow, 1, MPI_INT, 0, 3, MPI_COMM_WORLD);
