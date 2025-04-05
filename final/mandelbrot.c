@@ -55,7 +55,7 @@ int main( int argc, char** argv )
             printf("Debug: Kick of.\n Rank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",i,numRank, numele, myStart, myEnd);
             if (i == numRank)
             {
-                printf("\n\n" i);
+                printf("\n\n");
             }
 
             MPI_Send(&myStart, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
