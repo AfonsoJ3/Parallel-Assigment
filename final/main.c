@@ -60,19 +60,20 @@ int main(int argc, char** argv) {
             MPI_Status status;
 
             // Receive completed chunk from a worker
-            MPI_Recv(matrix, numele * nx, MPI_INT, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, &status);
+            // MPI_Recv(&matrix[], numele * nx, MPI_INT, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, &status);
+            MPI_Recv(&master_matrix(startRow * nx), (endRow - startRow) * nx, MPI_INT, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, &status);
             int workerRank = status.MPI_SOURCE;
             MPI_Recv(&startRow, 1, MPI_INT, workerRank, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             MPI_Recv(&endRow, 1, MPI_INT, workerRank, 4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-            // Store received results in the master matrix
-            for (int i = startRow; i < endRow; i++) 
-            {
-                for (int j = 0; j < nx; j++) 
-                {
-                    master_matrix[i * nx + j] = matrix[(i - startRow) * nx + j];
-                }
-            }
+            // // Store received results in the master matrix
+            // for (int i = startRow; i < endRow; i++) 
+            // {
+            //     for (int j = 0; j < nx; j++) 
+            //     {
+            //         master_matrix[i * nx + j] = matrix[(i - startRow) * nx + j];
+            //     }
+            // }
 
             // Assign new work or terminate worker
             if (nextRow < ny) 
@@ -143,21 +144,21 @@ int main(int argc, char** argv) {
                     }
                 }
                 double end = omp_get_wtime();
-                if (rank == 2) 
-                {
-                    printf("Rank: %d,TID: %d, Time taken: %f seconds\n", rank, tid, end - start);
-                }
+                // if (rank == 2) 
+                // {
+                //     printf("Rank: %d,TID: %d, Time taken: %f seconds\n", rank, tid, end - start);
+                // }
             }
             double RankEnd = MPI_Wtime();
            
-            if (startRow == 1000 && endRow == 1100)
-            {
-                if (runOnce) 
-                {
-                    printf("Rank: %d, Time taken: %f seconds\n\n", rank, RankEnd - RankStart);
-                    runOnce = false;
-                }
-            }
+            // if (startRow == 1000 && endRow == 1100)
+            // {
+            //     if (runOnce) 
+            //     {
+            //         printf("Rank: %d, Time taken: %f seconds\n\n", rank, RankEnd - RankStart);
+            //         runOnce = false;
+            //     }
+            // }
             // Send results back to the master
             MPI_Send(local_matrix, chunkSize, MPI_INT, 0, 2, MPI_COMM_WORLD);
             MPI_Send(&startRow, 1, MPI_INT, 0, 3, MPI_COMM_WORLD);
