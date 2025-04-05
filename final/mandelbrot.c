@@ -14,8 +14,8 @@ int main(int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &numRanks);
 
     // Mandelbrot parameters
-    int nx = 10000;
-    int ny = 5000;
+    int nx = 15360;
+    int ny = 8640 ;
     int maxIter = 255;
     double xStart = -2;
     double xEnd = 1;
@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
     double yEnd = 1;
 
     int* matrix = (int*)malloc(nx * ny * sizeof(int));
-    int numele = 10000; // Number of rows per task
+    int numele = 100; // Number of rows per task
     int workers = numRanks - 1;
 
     if (rank == 0) {
