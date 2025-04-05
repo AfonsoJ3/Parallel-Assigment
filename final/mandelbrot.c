@@ -30,6 +30,7 @@ int main( int argc, char** argv )
 
     int iter=0;
     int* master_Matrix = NULL;
+    int* temp_Matrix = (int*)malloc(nx * ny * sizeof(int));;
     int numele = 100;
     
 
@@ -47,7 +48,7 @@ int main( int argc, char** argv )
             myStart = (i - 1) * numele;
             myEnd = myStart + numele - 1;
             
-            if (myEnd >= ny)
+            if (myEnd > ny)
             {
                 myEnd = ny;
             }
@@ -67,9 +68,18 @@ int main( int argc, char** argv )
             MPI_Status status;
             MPI_Recv(&myStart, 1, MPI_INT, MPI_ANY_SOURCE, 1 , MPI_COMM_WORLD, &status);
             int workerRank = status.MPI_SOURCE;
-            MPI_Recv(&myEnd, 1, MPI_INT, MPI_ANY_SOURCE, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv(&master_Matrix(myStart * nx), (myEnd - myStart) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&myEnd, 1, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            //MPI_Recv(&master_Matrix(myStart * nx], (myEnd - myStart) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(temp_Matrix, numele * nx, MPI_INT, workerRank, 2, MPI_COMM_WORLD, &status);
             
+            for (int i = startRow; i < endRow; i++) 
+            {
+                for (int j = 0; j < nx; j++) 
+                {
+                    master_matrix[i * nx + j] = temp_Matrix[(i - startRow) * nx + j];
+                }
+            }
+
             printf("Debug: Received.\nRank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",workerRank,numRank, numele, myStart, myEnd);
 
             //Bookkeeping
@@ -77,7 +87,7 @@ int main( int argc, char** argv )
             {
                 myStart = myEnd + 1;
                 myEnd = myStart + numele - 1;
-                if (myEnd >= ny) 
+                if (myEnd > ny) 
                 {
                     myEnd = ny;
                 }
