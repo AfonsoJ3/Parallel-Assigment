@@ -47,13 +47,16 @@ int main( int argc, char** argv )
             myStart = (i - 1) * numele;
             myEnd = myStart + numele - 1;
             
-            if (myEnd > ny)
+            if (myEnd >= ny)
             {
-                myEnd = nx;
+                myEnd = ny;
             }
 
             printf("Debug: Kick of.\n Rank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",i,numRank, numele, myStart, myEnd);
-            
+            if (i == numRank)
+            {
+                printf("\n\n" i);
+            }
 
             MPI_Send(&myStart, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
             MPI_Send(&myEnd, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
@@ -74,25 +77,26 @@ int main( int argc, char** argv )
             {
                 myStart = myEnd + 1;
                 myEnd = myStart + numele - 1;
-                if (myEnd > ny) 
+                if (myEnd >= ny) 
                 {
                     myEnd = ny;
                 }
+                MPI_Send(&myStart, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
+                MPI_Send(&myEnd, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
             }
             else 
             {
                 myStart = -1;
+                MPI_Send(&myStart, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
                 activeWorkers--;
+                printf("Debug: Worker %d finished.\n", workerRank);
             }
 
             printf("Debug: In While Loop. \nRank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",rank,numRank, numele, myStart, myEnd);
-
-            MPI_Send(&myStart, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
-            MPI_Send(&myEnd, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
-
        }
         int dims[2]={ny,nx};
         matToImage("mandelbrot.jpg",master_Matrix,dims);
+        printf("Debug: Image created.\n");
 
         free(master_Matrix);
         MPI_Finalize();
