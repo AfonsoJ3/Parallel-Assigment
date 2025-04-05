@@ -41,7 +41,6 @@ int main(int argc, char** argv) {
                     endRow = ny;
                 }
 
-
                 MPI_Send(&startRow, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
                 MPI_Send(&endRow, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
                 nextRow = endRow;
@@ -60,8 +59,7 @@ int main(int argc, char** argv) {
             MPI_Status status;
 
             // Receive completed chunk from a worker
-             MPI_Recv(matrix, numele * nx, MPI_INT, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, &status);
-           // MPI_Recv(&master_matrix[startRow * nx], (endRow - startRow) * nx, MPI_INT, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, &status);
+            MPI_Recv(matrix, numele * nx, MPI_INT, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, &status);
             int workerRank = status.MPI_SOURCE;
             MPI_Recv(&startRow, 1, MPI_INT, workerRank, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             MPI_Recv(&endRow, 1, MPI_INT, workerRank, 4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -154,7 +152,7 @@ int main(int argc, char** argv) {
            
             for (int i = 1; i <= 10; i++) 
             {
-                printf("Rank: %d, Time taken: %f seconds\n\n", rank, RankEnd - RankStart);
+                printf("Rank: %d, Time taken: %f seconds\n", rank, RankEnd - RankStart);
             }
                 
             
