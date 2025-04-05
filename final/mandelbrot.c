@@ -59,23 +59,15 @@ int main( int argc, char** argv )
             MPI_Send(&myEnd, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
        }
 
-       while (activeWorkers == 0)
+       while (activeWorkers > 0)
        {
             MPI_Status status;
             MPI_Recv(&myStart, 1, MPI_INT, MPI_ANY_SOURCE, 1 , MPI_COMM_WORLD, &status);
             int workerRank = status.MPI_SOURCE;
-            //MPI_Recv(&master_Matrix[myStart * nx], (myEnd - myStart + 1) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv(matrix, numele * nx, MPI_INT, workerRank, 2, MPI_COMM_WORLD, &status);
+            MPI_Recv(&myEnd, 1, MPI_INT, MPI_ANY_SOURCE, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&master_Matrix[myStart * nx], (myEnd - myStart) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             
             printf("Debug: Received.\nRank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",workerRank,numRank, numele, myStart, myEnd);
-
-            for (int i = myStart; i < myEnd; i++) 
-            {
-                for (int j = 0; j < nx; j++) 
-                {
-                    master_Matrix[i * nx + j] = matrix[(i - myStart) * nx + j];
-                }
-            }
 
             //Bookkeeping
             if (myEnd < ny)
@@ -154,6 +146,7 @@ int main( int argc, char** argv )
             }
             //send the result back to master
             MPI_Send(&startRow, 1, MPI_INT, 0, 1 , MPI_COMM_WORLD);
+            MPI_Send(&endRow, 1, MPI_INT, 0, 1 , MPI_COMM_WORLD);
             MPI_Send(worker_matrix, (endRow - startRow) * nx, MPI_INT, 0, 1 , MPI_COMM_WORLD);
             free(worker_matrix);
         }
