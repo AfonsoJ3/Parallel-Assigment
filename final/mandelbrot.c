@@ -60,25 +60,25 @@ int main( int argc, char** argv )
             }
 
             MPI_Send(&myStart, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-            MPI_Send(&myEnd, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+            MPI_Send(&myEnd, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
        }
 
        while (activeWorkers > 0)
        {
             MPI_Status status;
-            MPI_Recv(&myStart, 1, MPI_INT, MPI_ANY_SOURCE, 1 , MPI_COMM_WORLD, &status);
+            MPI_Recv(&myStart, 1, MPI_INT, MPI_ANY_SOURCE, 3, MPI_COMM_WORLD, &status);
             int workerRank = status.MPI_SOURCE;
-            MPI_Recv(&myEnd, 1, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            //MPI_Recv(&master_Matrix(myStart * nx], (myEnd - myStart) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv(temp_Matrix, numele * nx, MPI_INT, workerRank, 2, MPI_COMM_WORLD, &status);
+            MPI_Recv(&myEnd, 1, MPI_INT, workerRank, 4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&master_Matrix[myStart * nx], (myEnd - myStart) * nx, MPI_INT, workerRank, 1 , MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            //MPI_Recv(temp_Matrix, numele * nx, MPI_INT, workerRank, 2, MPI_COMM_WORLD, &status);
             
-            for (int i = startRow; i < endRow; i++) 
-            {
-                for (int j = 0; j < nx; j++) 
-                {
-                    master_matrix[i * nx + j] = temp_Matrix[(i - startRow) * nx + j];
-                }
-            }
+            // for (int i = startRow; i < endRow; i++) 
+            // {
+            //     for (int j = 0; j < nx; j++) 
+            //     {
+            //         master_matrix[i * nx + j] = temp_Matrix[(i - startRow) * nx + j];
+            //     }
+            // }
 
             printf("Debug: Received.\nRank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",workerRank,numRank, numele, myStart, myEnd);
 
@@ -91,16 +91,15 @@ int main( int argc, char** argv )
                 {
                     myEnd = ny;
                 }
-                MPI_Send(&myStart, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
-                MPI_Send(&myEnd, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
             }
             else 
             {
                 myStart = -1;
-                MPI_Send(&myStart, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
                 activeWorkers--;
                 printf("Debug: Worker %d finished.\n", workerRank);
             }
+            MPI_Send(&myStart, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
+            MPI_Send(&myEnd, 1, MPI_INT, workerRank, 1, MPI_COMM_WORLD);
 
             printf("Debug: In While Loop. \nRank:%d, numRank:%d, numele:%d, myStart:%d, myEnd:%d.\n",rank,numRank, numele, myStart, myEnd);
        }
@@ -114,20 +113,19 @@ int main( int argc, char** argv )
     }
     else
     {
+        int startRow, endRow;
         while (true)
         {
-            int startRow, endRow;
             MPI_Recv(&startRow, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv(&endRow, 1, MPI_INT, 0, 0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
             printf("Start row and end row received.\n");
-
-            int* worker_matrix = (int*)malloc((endRow - startRow) * nx * sizeof(int));
 
             if (startRow == -1)
             {
                 break;
             }
+            MPI_Recv(&endRow, 1, MPI_INT, 0, 1,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            int* worker_matrix = (int*)malloc((endRow - startRow) * nx * sizeof(int));
 
             #pragma omp parallel 
             {
@@ -159,8 +157,8 @@ int main( int argc, char** argv )
                 }
             }
             //send the result back to master
-            MPI_Send(&startRow, 1, MPI_INT, 0, 1 , MPI_COMM_WORLD);
-            MPI_Send(&endRow, 1, MPI_INT, 0, 1 , MPI_COMM_WORLD);
+            MPI_Send(&startRow, 1, MPI_INT, 0, 3, MPI_COMM_WORLD);
+            MPI_Send(&endRow, 1, MPI_INT, 0, 4, MPI_COMM_WORLD);
             MPI_Send(worker_matrix, (endRow - startRow) * nx, MPI_INT, 0, 1 , MPI_COMM_WORLD);
             free(worker_matrix);
         }
