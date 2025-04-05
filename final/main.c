@@ -82,17 +82,20 @@ int main(int argc, char** argv) {
                 endRow = startRow + numele;
                 if (endRow > ny) endRow = ny;
 
-                MPI_Send(&startRow, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
-                MPI_Send(&endRow, 1, MPI_INT, workerRank, 1, MPI_COMM_WORLD);
+                
                 nextRow = endRow;
             } 
             else 
             {
-                int killSignal = -1;
-                MPI_Send(&killSignal, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
+                // int killSignal = -1;
+                // MPI_Send(&killSignal, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
+                startRow = -1;
                 activeWorkers--;
             }
+            MPI_Send(&startRow, 1, MPI_INT, workerRank, 0, MPI_COMM_WORLD);
+            MPI_Send(&endRow, 1, MPI_INT, workerRank, 1, MPI_COMM_WORLD);
         }
+        
 
         // Save final image
         int dims[2] = {ny, nx};
