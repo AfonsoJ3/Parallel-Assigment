@@ -25,6 +25,9 @@ int main(int argc, char** argv) {
     int* matrix = (int*)malloc(nx * ny * sizeof(int));
     int numele = 1000; // Number of rows per task
     int workers = numRanks - 1;
+    int totalTime = 0;
+    int startTime = 0;
+    int endTime = 0;
 
     if (rank == 0) {
         // Master process
@@ -63,15 +66,19 @@ int main(int argc, char** argv) {
             int workerRank = status.MPI_SOURCE;
             MPI_Recv(&startRow, 1, MPI_INT, workerRank, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             MPI_Recv(&endRow, 1, MPI_INT, workerRank, 4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&startTime, 1, MPI_INT, workerRank, 5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&endTime, 1, MPI_INT, workerRank, 6, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-             // Store received results in the master matrix
-             for (int i = startRow; i < endRow; i++) 
-             {
-                 for (int j = 0; j < nx; j++) 
-                 {
-                     master_matrix[i * nx + j] = matrix[(i - startRow) * nx + j];
-                 }
-             }
+            totalTime += endTime - startTime;
+
+            // Store received results in the master matrix
+            for (int i = startRow; i < endRow; i++) 
+            {
+                for (int j = 0; j < nx; j++) 
+                {
+                    master_matrix[i * nx + j] = matrix[(i - startRow) * nx + j];
+                }
+            }
 
             // Assign new work or terminate worker
             if (nextRow < ny) 
@@ -92,6 +99,7 @@ int main(int argc, char** argv) {
             MPI_Send(&endRow, 1, MPI_INT, workerRank, 1, MPI_COMM_WORLD);
         }
         
+        printf("Workers %d: %d seconds\n", numRanks - 1,totalTime);
 
         // Save final image
         int dims[2] = {ny, nx};
@@ -144,31 +152,35 @@ int main(int argc, char** argv) {
                     }
                 }
                 double end = omp_get_wtime();
-                if (rank == 2) 
-                {
-                    printf("Rank: %d,TID: %d, Time taken: %f seconds\n", rank, tid, end - start);
-                }
-                else if (rank == 3) 
-                {
-                    printf("Rank: %d,TID: %d, Time taken: %f seconds\n", rank, tid, end - start);
-                }
+                // if (rank == 2) 
+                // {
+                //     printf("Rank: %d,TID: %d, Time taken: %f seconds\n", rank, tid, end - start);
+                // }
+                // else if (rank == 3) 
+                // {
+                //     printf("Rank: %d,TID: %d, Time taken: %f seconds\n", rank, tid, end - start);
+                // }
             }
             double RankEnd = MPI_Wtime();
            
-            if (rank == 2) 
-            {
-                printf("Rank: %d, Time taken for rank: %f seconds\n", rank, RankEnd - RankStart);
-            }
-            else if (rank == 3) 
-            {
-                printf("Rank: %d, Time taken for rank: %f seconds\n", rank, RankEnd - RankStart);
-            }
+            // if (rank == 2) 
+            // {
+            //     printf("Rank: %d, Time taken for rank: %f seconds\n", rank, RankEnd - RankStart);
+            // }
+            // else if (rank == 3) 
+            // {
+            //     printf("Rank: %d, Time taken for rank: %f seconds\n", rank, RankEnd - RankStart);
+            // }
                 
             
             // Send results back to the master
             MPI_Send(local_matrix, chunkSize, MPI_INT, 0, 2, MPI_COMM_WORLD);
             MPI_Send(&startRow, 1, MPI_INT, 0, 3, MPI_COMM_WORLD);
             MPI_Send(&endRow, 1, MPI_INT, 0, 4, MPI_COMM_WORLD);
+            MPI_Send(&RankStart, 1, MPI_INT, 0, 5, MPI_COMM_WORLD);
+            MPI_Send(&RankEnd, 1, MPI_INT, 0, 6, MPI_COMM_WORLD);
+
+
 
             free(local_matrix);
         }
