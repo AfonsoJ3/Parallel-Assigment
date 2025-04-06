@@ -14,8 +14,8 @@ int main(int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &numRanks);
 
     // Mandelbrot parameters
-    int nx = 61440;
-    int ny = 34560; 
+    int nx = 30720;
+    int ny = 17280; 
     int maxIter = 255;
     double xStart = -2;
     double xEnd = 1;
@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
     double yEnd = 1;
 
     int* matrix = (int*)malloc(nx * ny * sizeof(int));
-    int numele = 100; // Number of rows per task
+    int numele = 1000; // Number of rows per task
     int workers = numRanks - 1;
 
     if (rank == 0) {
@@ -119,7 +119,8 @@ int main(int argc, char** argv) {
             double RankStart = MPI_Wtime();
             #pragma omp parallel
             {
-		int tid = omp_get_thread_num();
+		        int tid = omp_get_thread_num();
+                int numThreads = omp_get_num_threads();
                 double start = omp_get_wtime();
                 #pragma omp for nowait schedule(dynamic)
                 for (int i = startRow; i < endRow; i++) 
@@ -147,12 +148,20 @@ int main(int argc, char** argv) {
                 {
                     printf("Rank: %d,TID: %d, Time taken: %f seconds\n", rank, tid, end - start);
                 }
+                else if (rank == 3) 
+                {
+                    printf("Rank: %d,TID: %d, Time taken: %f seconds\n", rank, tid, end - start);
+                }
             }
             double RankEnd = MPI_Wtime();
            
-            for (int i = 1; i <= 10; i++) 
+            if (rank == 2) 
             {
-                printf("Rank: %d, Time taken: %f seconds\n", rank, RankEnd - RankStart);
+                printf("Rank: %d, Time taken for rank: %f seconds\n", rank, RankEnd - RankStart);
+            }
+            else if (rank == 3) 
+            {
+                printf("Rank: %d, Time taken for rank: %f seconds\n", rank, RankEnd - RankStart);
             }
                 
             
