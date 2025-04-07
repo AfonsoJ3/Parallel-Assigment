@@ -23,13 +23,14 @@ int main(int argc, char** argv) {
     double yEnd = 1;
 
     int* matrix = (int*)malloc(nx * ny * sizeof(int));
-    int numele = 1000; // Number of rows per task
-    int workers = numRanks - 1;
-    int workers = 1000;
+    int numele = 100; // Number of rows per task
+//    int workers = numRanks - 1;
+    int workers = 100;
 
     int totalTime = 0;
     int startTime = 0;
     int endTime = 0;
+    int a = 0;
 
     if (rank == 0) {
         // Master process
@@ -174,10 +175,11 @@ int main(int argc, char** argv) {
             //     printf("Rank: %d, Time taken for rank: %f seconds\n", rank, RankEnd - RankStart);
             // }
                 
-            for(int i = 0; i < 15; i++)
+           if (a < 30)
             {
                
-                printf("Rank: %d, Time taken for rank: %f seconds\n", rank, RankEnd - RankStart);
+                printf("Rank: %d, Time taken for rank: %f seconds, from %d - %d\n", rank, RankEnd - RankStart, startRow, endRow);
+            a ++;
             }
             // Send results back to the master
             MPI_Send(local_matrix, chunkSize, MPI_INT, 0, 2, MPI_COMM_WORLD);
