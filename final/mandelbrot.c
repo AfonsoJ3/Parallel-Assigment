@@ -25,6 +25,8 @@ int main(int argc, char** argv) {
     int* matrix = (int*)malloc(nx * ny * sizeof(int));
     int numele = 1000; // Number of rows per task
     int workers = numRanks - 1;
+    int workers = 1000;
+
     int totalTime = 0;
     int startTime = 0;
     int endTime = 0;
@@ -99,7 +101,7 @@ int main(int argc, char** argv) {
             MPI_Send(&endRow, 1, MPI_INT, workerRank, 1, MPI_COMM_WORLD);
         }
         
-        printf("Workers %d: %d seconds\n", numRanks - 1,totalTime);
+        //printf("Workers %d: %d seconds\n", numRanks - 1,totalTime);
 
         // Save final image
         int dims[2] = {ny, nx};
@@ -172,7 +174,11 @@ int main(int argc, char** argv) {
             //     printf("Rank: %d, Time taken for rank: %f seconds\n", rank, RankEnd - RankStart);
             // }
                 
-            
+            for(int i = 0; i < 15; i++)
+            {
+               
+                printf("Rank: %d, Time taken for rank: %f seconds\n", rank, RankEnd - RankStart);
+            }
             // Send results back to the master
             MPI_Send(local_matrix, chunkSize, MPI_INT, 0, 2, MPI_COMM_WORLD);
             MPI_Send(&startRow, 1, MPI_INT, 0, 3, MPI_COMM_WORLD);
